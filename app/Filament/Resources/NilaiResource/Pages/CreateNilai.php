@@ -9,4 +9,11 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateNilai extends CreateRecord
 {
     protected static string $resource = NilaiResource::class;
+
+     protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
 }

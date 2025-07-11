@@ -9,4 +9,11 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTahunAjaran extends CreateRecord
 {
     protected static string $resource = TahunAjaranResource::class;
+
+     protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
 }

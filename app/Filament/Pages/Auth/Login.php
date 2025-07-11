@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
+use Illuminate\Validation\ValidationException;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Auth\Login as BaseLogin;
@@ -44,5 +45,13 @@ class Login extends BaseLogin
     public function getAuthIdentifierName()
     {
         return 'username';
+    }
+
+    // ✅ Custom pesan error agar muncul tepat di bawah field
+    protected function throwFailureValidationException(): never
+    {
+        throw ValidationException::withMessages([
+            'data.username' => 'Username atau password salah.',
+        ]);
     }
 }

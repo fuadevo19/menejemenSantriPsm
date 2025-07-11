@@ -11,6 +11,6 @@ class CreateKelas extends CreateRecord
     protected static string $resource = KelasResource::class;
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl(); // redirect ke halaman index (tabel santri)
+        return $this->getResource()::getUrl(); // redirect ke halaman index 
     }
 }

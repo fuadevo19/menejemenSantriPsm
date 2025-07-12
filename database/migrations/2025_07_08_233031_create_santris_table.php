@@ -11,6 +11,7 @@ return new class extends Migration {
         $table->id();
         $table->string('nama_santri');
         $table->string('no_induk')->unique();
+        $table->string('NISN/NIS')->unique();
         $table->text('alamat')->nullable();
         $table->string('angkatan');
         $table->foreignId('kelas_id')->constrained()->onDelete('cascade');

@@ -10,9 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
 use App\Filament\Resources\TahunAjaranResource\Pages;
 
 class TahunAjaranResource extends Resource
@@ -62,26 +67,55 @@ class TahunAjaranResource extends Resource
                 TextColumn::make('label')->label('Label')->searchable(),
                 TextColumn::make('tahun_mulai')->label('Mulai'),
                 TextColumn::make('tahun_selesai')->label('Selesai'),
-                TextColumn::make('user.name')->label('Di input oleh'),
+                TextColumn::make('user.name')
+                ->label('Diinput oleh')
+                ->visible(fn () => Auth::user()?->role === 'super_admin'),
+            ])
+            ->filters([
+                TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+
+                DeleteAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && !$record->trashed()
+                    ),
+
+                RestoreAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && $record->trashed()
+                    ),
+
+                ForceDeleteAction::make()
+                    ->visible(fn ($record) => 
+                        Auth::user()?->role === 'super_admin' && $record->trashed()
+                    ),
             ])
             ->bulkActions([
-                DeleteBulkAction::make(),
+                DeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                    
+                RestoreBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                    
+                ForceDeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
             ]);
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->withTrashed(); // tampilkan soft delete juga
     }
 
     public static function beforeCreate(array $data): array
     {
         $data['user_id'] = Auth::id();
         return $data;
-    }
-
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
-    {
-        return parent::getEloquentQuery();
     }
 
     public static function getPages(): array

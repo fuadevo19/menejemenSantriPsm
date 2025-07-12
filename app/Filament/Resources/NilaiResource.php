@@ -3,30 +3,36 @@
 namespace App\Filament\Resources;
 
 use App\Models\Nilai;
-use App\Models\Santri;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use App\Filament\Resources\NilaiResource\Pages;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
 
 class NilaiResource extends Resource
 {
     protected static ?string $model = Nilai::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+    protected static ?string $navigationIcon  = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Manajemen Nilai & Absensi';
     protected static ?string $navigationLabel = 'Nilai Santri';
-    protected static ?string $modelLabel = 'Nilai';
+    protected static ?string $modelLabel      = 'Nilai';
     protected static ?string $pluralModelLabel = 'Data Nilai';
 
+    /* ---------- Form ---------- */
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -45,6 +51,16 @@ class NilaiResource extends Resource
                 ->relationship('mataPelajaran', 'nama_pelajaran')
                 ->required(),
 
+            Select::make('semester_id')
+                ->label('Semester')
+                ->relationship('semester', 'nama_semester')
+                ->required(),
+
+            Select::make('tahun_ajaran_id')
+                ->label('Tahun Ajaran')
+                ->relationship('tahunAjaran', 'label')
+                ->required(),
+
             TextInput::make('nilai')
                 ->label('Nilai')
                 ->numeric()
@@ -52,28 +68,20 @@ class NilaiResource extends Resource
                 ->minValue(0)
                 ->maxValue(100),
 
-                TextInput::make('jumlah_terbilang')
+            TextInput::make('jumlah_terbilang')
                 ->label('Jumlah Terbilang')
                 ->required()
                 ->maxLength(255),
 
-                Select::make('semester_id')
-                ->label('Semester')
-                ->relationship('semester', 'nama_semester')
-                ->required(),
+            Hidden::make('user_id')->default(fn () => Auth::id()),
+        ]);
+    }
 
-                Select::make('tahun_ajaran_id')
-                ->label('Tahun Ajaran')
-                ->relationship('tahunAjaran', 'label') // Pastikan relasi di model benar
-                ->required(),
-
-                Hidden::make('user_id')->default(fn () => Auth::id()),
-                ]);
-            }
-
+    /* ---------- Table ---------- */
     public static function table(Table $table): Table
     {
-        return $table->columns([
+        return $table
+            ->columns([
                 TextColumn::make('santri.nama_santri')->label('Santri')->searchable(),
                 TextColumn::make('kelas.nama_kelas')->label('Kelas'),
                 TextColumn::make('mataPelajaran.nama_pelajaran')->label('Pelajaran'),
@@ -81,26 +89,59 @@ class NilaiResource extends Resource
                 TextColumn::make('tahunAjaran.label')->label('Tahun Ajaran'),
                 TextColumn::make('nilai')->label('Nilai'),
                 TextColumn::make('jumlah_terbilang')->label('Terbilang'),
-                TextColumn::make('user.name')->label('Diinput Oleh'),
+                TextColumn::make('user.name')
+                ->label('Diinput oleh')
+                ->visible(fn () => Auth::user()?->role === 'super_admin'),
             ])
+            ->filters([
+                TrashedFilter::make(),
+                
+                SelectFilter::make('nama_semester')
+                    ->label('semester')
+                    ->relationship('semester', 'nama_semester'),
+                SelectFilter::make('label')
+                    ->label('Tahun Ajaran')
+                    ->relationship('tahunAjaran', 'label'),
+                
+                ])
             ->actions([
-                EditAction::make()->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
-                DeleteAction::make()->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+                EditAction::make()
+                    ->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+
+                DeleteAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && !$record->trashed()
+                    ),
+
+                RestoreAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && $record->trashed()
+                    ),
+
+                ForceDeleteAction::make()
+                    ->visible(fn ($record) => 
+                        Auth::user()?->role === 'super_admin' && $record->trashed()
+                    ),
             ])
             ->bulkActions([
-                DeleteBulkAction::make(),
+                DeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                RestoreBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                ForceDeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
             ]);
     }
 
+    /* ---------- Query ---------- */
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
-        if (Auth::check() && Auth::user()->role !== 'super_admin') {
-            $query->where('user_id', Auth::id());
-        }
-        return $query;
+        return parent::getEloquentQuery()->withTrashed();   // tampilkan juga data soft‑deleted
     }
 
+    /* ---------- Auto‑set user_id ---------- */
     public static function beforeCreate(array $data): array
     {
         $data['user_id'] = Auth::id();
@@ -115,12 +156,13 @@ class NilaiResource extends Resource
         return $data;
     }
 
+    /* ---------- Pages ---------- */
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNilais::route('/'),
+            'index'  => Pages\ListNilais::route('/'),
             'create' => Pages\CreateNilai::route('/create'),
-            'edit' => Pages\EditNilai::route('/{record}/edit'),
+            'edit'   => Pages\EditNilai::route('/{record}/edit'),
         ];
     }
 }

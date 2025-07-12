@@ -10,10 +10,8 @@ class CreateSemester extends CreateRecord
 {
     protected static string $resource = SemesterResource::class;
 
-     protected function getHeaderActions(): array
+    protected function getRedirectUrl(): string
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return $this->getResource()::getUrl(); // redirect ke halaman index 
     }
 }

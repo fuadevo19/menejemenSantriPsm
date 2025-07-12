@@ -10,10 +10,9 @@ class CreateKepribadianSantri extends CreateRecord
 {
     protected static string $resource = KepribadianSantriResource::class;
 
-     protected function getHeaderActions(): array
+     protected function getRedirectUrl(): string
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return $this->getResource()::getUrl(); // redirect ke halaman index 
     }
+
 }

@@ -16,6 +16,7 @@ class Absensi extends Model
         'izin',
         'alpha',
         'user_id',
+        'semester_id'
     ];
 
     public function santri()
@@ -26,5 +27,10 @@ class Absensi extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(\App\Models\Semester::class);
     }
 }

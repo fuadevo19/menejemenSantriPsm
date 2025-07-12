@@ -16,7 +16,8 @@ class KepribadianSantri extends Model
         'kerajinan',
         'kedisiplinan',
         'kerapihan',
-        'user_id'
+        'user_id',
+        'semester_id'
     ];
 
     public function santri()
@@ -27,5 +28,10 @@ class KepribadianSantri extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(\App\Models\Semester::class);
     }
 }

@@ -10,10 +10,8 @@ class CreateMataPelajaran extends CreateRecord
 {
     protected static string $resource = MataPelajaranResource::class;
 
-     protected function getHeaderActions(): array
+     protected function getRedirectUrl(): string
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return $this->getResource()::getUrl(); // redirect ke halaman index 
     }
 }

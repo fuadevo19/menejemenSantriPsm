@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Models\Absensi;
-use App\Models\Santri;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -14,7 +13,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Filters\TrashedFilter;
 use App\Filament\Resources\AbsensiResource\Pages;
 
 class AbsensiResource extends Resource
@@ -35,6 +39,11 @@ class AbsensiResource extends Resource
                 ->relationship('santri', 'nama_santri')
                 ->required(),
 
+            Select::make('semester_id')                       // ⬅️ baru
+                ->label('Semester')
+                ->relationship('semester', 'nama_semester')
+                ->required(),
+
             TextInput::make('sakit')->numeric()->required()->default(0),
             TextInput::make('izin')->numeric()->required()->default(0),
             TextInput::make('alpha')->numeric()->required()->default(0),
@@ -45,29 +54,54 @@ class AbsensiResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
+        return $table
+            ->columns([
                 TextColumn::make('santri.nama_santri')->label('Santri')->searchable(),
                 TextColumn::make('sakit')->label('Sakit'),
                 TextColumn::make('izin')->label('Izin'),
                 TextColumn::make('alpha')->label('Alpha'),
-                TextColumn::make('user.name')->label('Diinput oleh'),
+                TextColumn::make('semester.nama_semester')->label('Semester'),
+                TextColumn::make('user.name')
+                ->label('Diinput oleh')
+                ->visible(fn () => Auth::user()?->role === 'super_admin'),
+            ])
+            ->filters([
+                TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make()->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
-                DeleteAction::make()->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+                EditAction::make()
+                    ->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+
+                DeleteAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && !$record->trashed()
+                    ),
+
+                RestoreAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && $record->trashed()
+                    ),
+
+                ForceDeleteAction::make()
+                    ->visible(fn ($record) => 
+                        Auth::user()?->role === 'super_admin' && $record->trashed()
+                    ),
             ])
             ->bulkActions([
-                DeleteBulkAction::make(),
+                DeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                RestoreBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                ForceDeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
             ]);
     }
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
-        if (Auth::check() && Auth::user()->role !== 'super_admin') {
-            $query->where('user_id', Auth::id());
-        }
-        return $query;
+        return parent::getEloquentQuery()->withTrashed();
     }
 
     public static function beforeCreate(array $data): array

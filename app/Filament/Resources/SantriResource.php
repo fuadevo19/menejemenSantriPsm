@@ -21,6 +21,10 @@ use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use App\Filament\Resources\SantriResource\Pages;
 
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TextFilter;
+
 class SantriResource extends Resource
 {
     protected static ?string $model = Santri::class;
@@ -86,11 +90,26 @@ class SantriResource extends Resource
                 TextColumn::make('kelas.nama_kelas')->label('Kelas'),
                 TextColumn::make('alamat')->label('Alamat'),
                 TextColumn::make('angkatan')->label('Angkatan'),
-                TextColumn::make('user.name')->label('Di Input oleh'),
+                TextColumn::make('user.name')
+                ->label('Diinput oleh')
+                ->visible(fn () => Auth::user()?->role === 'super_admin'),
             ])
             ->filters([
                 TrashedFilter::make(),
-            ])
+                
+                SelectFilter::make('kelas_id')
+                    ->label('Kelas')
+                    ->relationship('kelas', 'nama_kelas'),
+
+                SelectFilter::make('angkatan')
+                    ->label('Angkatan')
+                    ->options(
+                        Santri::select('angkatan')
+                            ->distinct()
+                            ->pluck('angkatan', 'angkatan')
+                            ->toArray()
+                    ),
+                ])
             ->actions([
                 EditAction::make()
                     ->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),

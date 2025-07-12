@@ -12,9 +12,14 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
 use App\Filament\Resources\KepribadianSantriResource\Pages;
 
 class KepribadianSantriResource extends Resource
@@ -33,6 +38,11 @@ class KepribadianSantriResource extends Resource
             Select::make('santri_id')
                 ->label('Santri')
                 ->relationship('santri', 'nama_santri')
+                ->required(),
+
+            Select::make('semester_id')                       // ⬅️ baru
+                ->label('Semester')
+                ->relationship('semester', 'nama_semester')
                 ->required(),
 
             TextInput::make('akhlaq')
@@ -69,30 +79,58 @@ class KepribadianSantriResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
+        return $table
+            ->columns([
                 TextColumn::make('santri.nama_santri')->label('Santri')->searchable(),
                 TextColumn::make('akhlaq')->label('Akhlaq'),
                 TextColumn::make('kerajinan')->label('Kerajinan'),
                 TextColumn::make('kedisiplinan')->label('Kedisiplinan'),
                 TextColumn::make('kerapihan')->label('Kerapihan'),
-                TextColumn::make('user.name')->label('Di Input oleh'),
+                TextColumn::make('semester.nama_semester')->label('Semester'),
+                TextColumn::make('user.name')
+                ->label('Diinput oleh')
+                ->visible(fn () => Auth::user()?->role === 'super_admin'),
+            ])
+            ->filters([
+                TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make()->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
-                DeleteAction::make()->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+                EditAction::make()
+                    ->visible(fn ($record) => Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()),
+
+                DeleteAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && !$record->trashed()
+                    ),
+
+                RestoreAction::make()
+                    ->visible(fn ($record) => 
+                        (Auth::user()?->role === 'super_admin' || $record->user_id === Auth::id()) 
+                        && $record->trashed()
+                    ),
+
+                ForceDeleteAction::make()
+                    ->visible(fn ($record) => 
+                        Auth::user()?->role === 'super_admin' && $record->trashed()
+                    ),
             ])
+
             ->bulkActions([
-                DeleteBulkAction::make(),
+                DeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                    
+                RestoreBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
+                    
+                ForceDeleteBulkAction::make()
+                    ->visible(fn () => Auth::user()?->role === 'super_admin'),
             ]);
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+   public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
-        if (Auth::check() && Auth::user()->role !== 'super_admin') {
-            $query->where('user_id', Auth::id());
-        }
-        return $query;
+        return parent::getEloquentQuery()->withTrashed(); // tampilkan semua data termasuk terhapus
     }
 
     public static function beforeCreate(array $data): array
@@ -108,13 +146,13 @@ class KepribadianSantriResource extends Resource
         }
         return $data;
     }
-
+    
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListKepribadianSantris::route('/'),
+            'index'  => Pages\ListKepribadianSantris::route('/'),
             'create' => Pages\CreateKepribadianSantri::route('/create'),
-            'edit' => Pages\EditKepribadianSantri::route('/{record}/edit'),
+            'edit'   => Pages\EditKepribadianSantri::route('/{record}/edit'),
         ];
     }
 }

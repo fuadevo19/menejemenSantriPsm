@@ -11,6 +11,6 @@ class CreateUser extends CreateRecord
     protected static string $resource = UserResource::class;
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl(); // redirect ke halaman index (tabel santri)
+        return $this->getResource()::getUrl(); // redirect ke halaman index 
     }
 }

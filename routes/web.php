@@ -8,6 +8,14 @@ Route::get('/', function () {
 
 });
 
+Route::get('/datadiri', function(){
+    return view('datadiri');
+});
+
 Route::get('/cover', function(){
     return view('cover');
+});
+
+Route::get('/raport', function(){
+    return view('raport');
 });

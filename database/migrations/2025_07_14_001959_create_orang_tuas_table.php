@@ -21,7 +21,10 @@ return new class extends Migration
             $table->string('pendidikan')->nullable();
             $table->string('pekerjaan')->nullable();
             $table->unsignedBigInteger('penghasilan')->nullable();
+            $table->string('email')->nullable(); // tambahkan nullable
+            $table->string('telpon')->nullable(); // ubah dari integer ke string dan nullable
             $table->timestamps();
+            $table->softDeletes();
 
             // 1 santri hanya boleh punya 1 ayah & 1 ibu
             $table->unique(['santri_id', 'tipe']);

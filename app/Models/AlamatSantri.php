@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AlamatSantri extends Model
 {
     protected $table   = 'alamat_santris';
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'dusun',
@@ -15,11 +18,12 @@ class AlamatSantri extends Model
         'kabupaten',
         'provinsi',
         'kode_pos',
+        'santri_id'
     ];
 
     /* 🔗 1 : 1 ke Santri */
     public function santri()
     {
-        return $this->hasOne(Santri::class, 'alamat_id');
+        return $this->belongsTo(Santri::class);
     }
 }

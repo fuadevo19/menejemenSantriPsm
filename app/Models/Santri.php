@@ -45,9 +45,8 @@ class Santri extends Model
     /* ---------- Relasi alamat (one‑to‑one) ---------- */
     public function alamat()
     {
-        return $this->belongsTo(AlamatSantri::class, 'alamat_id');
-        // jika kamu memakai FK santri_id di tabel alamat, ganti:
-        // return $this->hasOne(AlamatSantri::class);
+        return $this->hasOne(AlamatSantri::class);
+        
     }
 
     /* ---------- Relasi orang‑tua (jika pakai tabel orang_tuas) ---------- */

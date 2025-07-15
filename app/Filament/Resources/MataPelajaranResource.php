@@ -42,6 +42,15 @@ class MataPelajaranResource extends Resource
                     $set('nama_pelajaran', $state ? ucwords(strtolower($state)) : '')
                 ),
 
+            TextInput::make('nama_pelajaran_arab')
+                ->label('Nama Arab Pelajaran')
+                ->extraAttributes([
+                    'dir'  => 'rtl',      // tulis dari kanan ke kiri
+                    'lang' => 'ar',       // beri tahu browser ini bahasa Arab
+                    'inputmode' => 'verbatim', // keyboard huruf penuh, bukan angka
+                ])
+                ->placeholder('فقه المبادئ'),
+
             Select::make('kategori')
                 ->label('Kategori')
                 ->options([
@@ -68,6 +77,7 @@ class MataPelajaranResource extends Resource
             ->columns([
                 TextColumn::make('nama_pelajaran')->label('Pelajaran')->searchable(),
                 TextColumn::make('kategori')->label('Kategori'),
+                TextColumn::make('nama_pelajaran_arab')->label('Nama Arab Pelajaran'),
                 TextColumn::make('kelas.nama_kelas')->label('Kelas'),
                 TextColumn::make('user.name')
                 ->label('Diinput oleh')

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Filament\Resources\TahunAjaranResource\Pages;
+namespace App\Filament\Resources\NilaiResource\Pages;
 
 use Filament\Actions;
 use Filament\Actions\Action;
+use App\Filament\Resources\NilaiResource;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\Resources\TahunAjaranResource;
 
-class CreateTahunAjaran extends CreateRecord
+class CreateNilai extends CreateRecord
 {
-    protected static string $resource = TahunAjaranResource::class;
+    protected static string $resource = NilaiResource::class;
 
-    protected function getRedirectUrl(): string
+     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl(); // redirect ke halaman index 
     }

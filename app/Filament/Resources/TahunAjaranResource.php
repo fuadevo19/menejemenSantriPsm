@@ -57,6 +57,20 @@ class TahunAjaranResource extends Resource
                 ->maxValue(2100)
                 ->required(),
 
+            TextInput::make('kepala_madrasah')
+                ->label('Kepala Madrasah')
+                ->required()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('kepala_madrasah', ucwords(strtolower($state)))
+                ),
+
+            TextInput::make('pengasuh')
+                ->label('Pengasuh')
+                ->required()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('pengasuh', ucwords(strtolower($state)))
+                ),
+
             Hidden::make('user_id')->default(fn () => Auth::id()),
         ]);
     }

@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('tahun_ajaran_id')->constrained()->onDelete('cascade');
             $table->float('nilai'); // bisa juga integer kalau tidak pakai desimal
             $table->string('jumlah_terbilang');
+            $table->string('jumlah_terbilang_arab')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

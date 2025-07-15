@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('mata_pelajarans', function (Blueprint $table) {
             $table->id();
             $table->string('nama_pelajaran');
+            $table->string('nama_pelajaran_arab')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->string('kategori'); // bisa juga dijadikan enum jika diperlukan
             $table->foreignId('kelas_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

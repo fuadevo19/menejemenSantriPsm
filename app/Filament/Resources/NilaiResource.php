@@ -71,7 +71,20 @@ class NilaiResource extends Resource
             TextInput::make('jumlah_terbilang')
                 ->label('Jumlah Terbilang')
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                ->nullable()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('nama_santri', ucwords(strtolower($state)))
+                ),
+
+            TextInput::make('jumlah_terbilang_arab')
+                ->label('Jumlah Terbilang Arab')
+                ->extraAttributes([
+                    'dir'  => 'rtl',      // tulis dari kanan ke kiri
+                    'lang' => 'ar',       // beri tahu browser ini bahasa Arab
+                    'inputmode' => 'verbatim', // keyboard huruf penuh, bukan angka
+                ])
+                ->placeholder('سبعون'),
 
             Hidden::make('user_id')->default(fn () => Auth::id()),
         ]);
@@ -89,6 +102,7 @@ class NilaiResource extends Resource
                 TextColumn::make('tahunAjaran.label')->label('Tahun Ajaran'),
                 TextColumn::make('nilai')->label('Nilai'),
                 TextColumn::make('jumlah_terbilang')->label('Terbilang'),
+                TextColumn::make('jumlah_terbilang_arab')->label('Terbilang Arab'),
                 TextColumn::make('user.name')
                 ->label('Diinput oleh')
                 ->visible(fn () => Auth::user()?->role === 'super_admin'),

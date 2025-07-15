@@ -29,14 +29,10 @@ return new class extends Migration {
             $table->foreignId('kelas_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            /* relasi alamat jika dipisah */
-            $table->foreignId('alamat_id')->nullable()->constrained('alamat_santris')->nullOnDelete();
-
             $table->timestamps();
             $table->softDeletes();
         });
 
-        
 
     }
 

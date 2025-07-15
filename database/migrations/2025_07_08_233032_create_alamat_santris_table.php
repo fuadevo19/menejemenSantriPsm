@@ -13,6 +13,7 @@ return new class extends Migration
     {
        Schema::create('alamat_santris', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('santri_id')->constrained('santris')->cascadeOnDelete();
             $table->string('dusun')->nullable();
             $table->string('desa')->nullable();
             $table->string('kecamatan')->nullable();
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('provinsi')->nullable();
             $table->string('kode_pos')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

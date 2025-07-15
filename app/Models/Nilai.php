@@ -18,6 +18,7 @@ class Nilai extends Model
         'tahun_ajaran_id',
         'nilai',
         'jumlah_terbilang',
+        'jumlah_terbilang_arab',
         'user_id',
     ];
 

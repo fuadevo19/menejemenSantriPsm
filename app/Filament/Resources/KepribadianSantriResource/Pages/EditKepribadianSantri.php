@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\KepribadianSantriResource\Pages;
 
-use App\Filament\Resources\KepribadianSantriResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\KepribadianSantriResource;
 
 class EditKepribadianSantri extends EditRecord
 {
@@ -13,7 +14,13 @@ class EditKepribadianSantri extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('back')
+                ->label('Kembali ke Tabel')
+                ->url(\App\Filament\Resources\SantriResource::getUrl('index'))
+                ->icon('heroicon-m-arrow-uturn-left')
+                ->color('gray'),
             Actions\DeleteAction::make(),
+            
         ];
     }
 }

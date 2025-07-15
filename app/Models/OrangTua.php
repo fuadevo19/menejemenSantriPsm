@@ -8,7 +8,7 @@ class OrangTua extends Model
 {
     protected $fillable = [
         'santri_id', 'tipe', 'nama', 'tahun_lahir', 'nik',
-        'pendidikan', 'pekerjaan', 'penghasilan',
+        'pendidikan', 'pekerjaan', 'penghasilan','email','telpon'
     ];
 
     public function santri()

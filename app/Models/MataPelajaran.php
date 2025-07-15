@@ -12,6 +12,7 @@ class MataPelajaran extends Model
 
     protected $fillable = [
         'nama_pelajaran',
+        'nama_pelajaran_arab',
         'kategori',
         'kelas_id',
         'user_id',

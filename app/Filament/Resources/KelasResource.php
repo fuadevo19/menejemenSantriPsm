@@ -41,6 +41,13 @@ class KelasResource extends Resource
                     $set('nama_kelas', ucwords(strtolower($state)))
                 ),
 
+            TextInput::make('wali_kelas')
+                ->label('Wali Kelas')
+                ->required()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('wali_kelas', ucwords(strtolower($state)))
+                ),
+
             Hidden::make('user_id')->default(fn () => Auth::id()),
         ]);
     }
@@ -52,6 +59,7 @@ class KelasResource extends Resource
             ->columns([
                 TextColumn::make('user.name')->label('Di‑input oleh'),
                 TextColumn::make('nama_kelas')->label('Nama Kelas')->searchable(),
+                TextColumn::make('wali_kelas')->label('Wali kelas'),
             ])
             ->filters([
                 TrashedFilter::make(),

@@ -12,29 +12,29 @@
   @vite('resources/css/app.css')
 </head>
 <body class="bg-white text-[11pt] text-black p-8 flex flex-col justify-center items-center">
-  <div class="w-full h-full border border-black flex flex-col justify-center items-center text-center px-8 py-10">
+  <div class="w-full h-full border border-black flex flex-col justify-center items-center text-center px-8 py-2 ">
     <h1 class="text-xl font-bold mb-2 ">BUKU</h1>
     <h2 class="text-xl font-bold mb-2">LAPORAN HASIL BELAJAR SANTRI</h2>
-    <h2 class="text-xl font-bold mb-4">MADRASAH DINIYAH</h2>
+    <h2 class="text-xl font-bold mb-10">MADRASAH DINIYAH</h2>
 
     <!-- Logo -->
-    <img src="" alt="Logo Madrasah" class="my-4 w-40 h-40 object-contain" />
+    <img src="{{asset('images/logoPSM.png')}}" alt="Logo Madrasah" class="my-4 w-50 h-50 object-contain" />
 
     <!-- Informasi Lembaga -->
-    <div class="text-[10pt] leading-tight mt-4 mb-6">
-      <strong>PONDOK PESANTREN SABILIL MUQORROBIN</strong><br/>
-      MADRASAH DINIYAH PONDOK PESANTREN SABILIL MUQORROBIN<br/>
-      <strong>NPSN : 510018080022</strong><br/>
-      Jl. Santri 01, Suka Agung, Buay Bahuga, Way Kanan, Lampung, 34767<br/>
-      Telp.: 082280307067, Email: pondokpsm98@gmail.com<br/>
-      Website: https://mipsmsa.psmeducation.id
+    <div class="text-[10pt] leading-tight mt-24 mb-6">
+      <p class="mb-1.5"><strong>PONDOK PESANTREN SABILIL MUQORROBIN</strong></p>
+      <p class="mb-1.5"><strong>MADRASAH DINIYAH PONDOK PESANTREN SABILIL MUQORROBIN</strong></p>
+      <p class="mb-1.5"><strong>NPSN : 510018080022</strong></p>
+      <p class="mb-1.5">Jl. Santri 01, Suka Agung, Buay Bahuga, Way Kanan, Lampung 34767</p>
+      <p class="mb-1.5">Telp.: 082280307067, Email: pondokpsm98@gmail.com Website: https://mipsmsa.psmeducation.id</p>
     </div>
 
     <!-- Nama Santri -->
-    <div class="mt-8">
-      <div class="text-[10pt]">NAMA SANTRI</div>
-      <h2 class="text-[14pt] font-bold mt-1 mb-2 uppercase">A. SANUSI RIDWAN</h2>
-      <div class="text-[10pt]">Nomor Induk: 2307001/0</div>
+    <div class="mt-10 w-80">
+      <div class="text-[10pt] mb-9">NAMA SANTRI</div>
+      <h2 class="text-[14pt] font-bold mt-1 uppercase">A. SANUSI RIDWAN</h2>
+      <hr class="w-full border-1">
+      <div class="text-[10pt] mt-2">Nomor Induk: 2307001/0</div>
     </div>
   </div>
 </body>

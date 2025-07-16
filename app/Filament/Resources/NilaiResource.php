@@ -70,12 +70,13 @@ class NilaiResource extends Resource
 
             TextInput::make('jumlah_terbilang')
                 ->label('Jumlah Terbilang')
-                ->required()
                 ->maxLength(255)
                 ->nullable()
                 ->afterStateUpdated(fn ($set,$state)=>
                     $set('nama_santri', ucwords(strtolower($state)))
-                ),
+                )
+                ->required(),
+                
 
             TextInput::make('jumlah_terbilang_arab')
                 ->label('Jumlah Terbilang Arab')

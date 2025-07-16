@@ -12,47 +12,62 @@
   @vite('resources/css/app.css')
 </head>
 <body class="bg-white text-[8.5pt] leading-tight p-4">
-  <div class="border border-black h-full flex flex-col">
+  <div class="border border-black h-full flex flex-col relative">
     <!-- Kop Lembaga (Logo + Teks) -->
     <div class="items-center justify-center border-b border-black h-[90px]">
       <img src="{{ asset('images/copPSM.png') }}" class="" alt="Logo"/>
     </div>
 
     <!-- Judul -->
-    <h3 class="text-center font-bold text-[11pt] my-2 mt-20 underline">LAPORAN HASIL BELAJAR SANTRI</h3>
+    <h3 class="text-center font-bold text-[14pt] my-2 mt-20">LAPORAN HASIL BELAJAR SANTRI</h3>
 
-    <!-- Info Santri -->
-<table class="w-full mb-1 text-[10pt] table-fixed">
-    <colgroup>
-        <col class="w-24" /> <!-- label kiri -->
-        <col class="w-3" />  <!-- : -->
-        <col class="w-[180px]" /> <!-- isian kiri -->
-        <col class="w-40" />  <!-- GAP TENGAH -->
-        <col class="w-16" /> <!-- label kanan -->
-        <col class="w-3" />  <!-- : -->
-        <col /> <!-- isian kanan -->
-    </colgroup>
-<tbody>
-  <tr>
-    <td class="pl-2">Nama Santri</td><td>:</td><td>&nbsp;</td>
-    <td></td>
-    <td class="pl-2">Kelas</td><td>:</td><td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td class="pl-2">No. Induk</td><td>:</td><td>&nbsp;</td>
-    <td></td>
-    <td class="pl-2">Semester</td><td>:</td><td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td class="pl-2">Alamat</td><td>:</td><td>&nbsp;</td>
-    <td></td>
-    <td class="pl-2">Tahun Pelajaran</td><td>:</td><td>&nbsp;</td>
-  </tr>
+    <div class="w-full px-4 py-2 text-[9pt] font-sans">
 
-</tbody>
+  <!-- Dua kolom info -->
+  <div class="grid grid-cols-2 gap-77 mx-1.5">
+    <!-- Kolom Kiri -->
+    <div class="space-y-[2px]">
+      <div class="flex">
+        <span class="min-w-[80px]">Nama Santri</span>
+        <span class="w-2 text-center">:</span>
+        <span class="font-semibold flex-1">IMAM APDOL PADRI</span>
+      </div>
+      <div class="flex">
+        <span class="min-w-[80px]">No. Induk</span>
+        <span class="w-2 text-center">:</span>
+        <span class="flex-1">2307006</span>
+      </div>
+      <div class="flex">
+        <span class="min-w-[80px]">Alamat</span>
+        <span class="w-2 text-center">:</span>
+        <span class="flex-1">‑</span>
+      </div>
+    </div>
+
+    <!-- Kolom Kanan -->
+    <div class="space-y-[2px]">
+      <div class="flex">
+        <span class="min-w-[90px]">Kelas</span>
+        <span class="w-2 text-center">:</span>
+        <span class="flex-1">Ula Putri Awaliyah</span>
+      </div>
+      <div class="flex">
+        <span class="min-w-[90px]">Semester</span>
+        <span class="w-2 text-center">:</span>
+        <span class="flex-1">Semester 2 (Genap)</span>
+      </div>
+      <div class="flex">
+        <span class="min-w-[90px]">Tahun Pelajaran</span>
+        <span class="w-2 text-center">:</span>
+        <span class="flex-1">2024/2025</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-    <table class="w-full text-[8pt] text-center">
+  <div class="mx-5">
+    <table class="w-full text-[9pt] text-center ">
         {{-- <colgroup>
             <col class="w-4" />        <!-- No -->
             <col class="w-72" /> <!-- Mata Pelajaran -->
@@ -65,242 +80,431 @@
         </colgroup> --}}
   <!-- Header -->
         <thead>
-            <tr>
-            <th colspan="2" rowspan="2" class="border border-black">Mata Pelajaran</th>
-            <th colspan="2" class="border border-black">Hasil Tes</th> 
-            <th rowspan="2" class="w-10 border border-black">KKM</th>
-            <th colspan="2" class="border border-black">الدّرجاتُ النّهائية</th>
-            <th colspan="2" rowspan="2" class="w-6 border border-black">الموادّ الدراسيّة</th>
-            
-            </tr>
-            <tr>
-            <th class="w-10 border-r border-b border-black">Angka</th>
-            <th class="w-10 border-r border-b border-black">Huruf</th>
-            <th class="w-10 border-r border-b border-black">كتابةً</th>
-            <th class="w-10 border-r border-b border-black">رقماً</th>
-            </tr>
-        </thead>
+  <tr>
+    <th colspan="2" rowspan="2" class="border border-black py-0.5">
+      Mata Pelajaran
+    </th>
+    <th colspan="2" class="border border-black py-0.5">
+      Hasil Tes
+    </th>
+    <th rowspan="2" class="w-10 border border-black py-0.5">
+      KKM
+    </th>
+    <th colspan="2" class="border border-black py-0.5" dir="rtl">
+      الدّرجاتُ النّهائية
+    </th>
+    <th colspan="2" rowspan="2" class="w-6 border border-black py-0.5" dir="rtl">
+      الموادّ الدراسيّة
+    </th>
+  </tr>
+
+  <tr>
+    <th class="w-10 border-r border-b border-black py-0.5">
+      Angka
+    </th>
+    <th class="w-10 border-r border-b border-black py-0.5">
+      Huruf
+    </th>
+    <th class="w-10 border-r border-b border-black py-0.5" dir="rtl">
+      كتابةً
+    </th>
+    <th class="w-10 border-r border-b border-black py-0.5" dir="rtl">
+      رقماً
+    </th>
+  </tr>
+</thead>
+
 
         <!-- Bagian A – Tertulis -->
         <tbody class="text-[8pt]">
             <colgroup>
                     <col class="w-7" />        <!-- No -->
-                    <col class="w-52" /> <!-- Mata Pelajaran -->
+                    <col class="w-33" /> <!-- Mata Pelajaran -->
                     <col class="w-10" />       <!-- Angka -->
                     <col class="w-28" />       <!-- Huruf -->
                     <col class="w-10" />       <!-- KKM -->
                     <col class="w-28" />       <!-- كتابةً -->
                     <col class="w-10" />       <!-- رقمًا --> 
-                    <col class="w-52" />        <!-- Bahasa Arab -->
+                    <col class="w-33" />        <!-- Bahasa Arab -->
                     <col class="w-7" />         <!--nomor-->
                 </colgroup>
 
             <tr>
-                <td class="border border-black font-bold">A</td>
-                <td class="border border-black text-left font-bold">Tertulis</td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td dir="rtl" class="border border-black text-right font-bold">مكتوب</td>
-                <td class="border border-black text-left"></td>
+              <td class="border border-black font-bold py-0.5">A</td>
+              <td class="border border-black text-left font-bold py-0.5 pl-1">Tertulis</td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right font-bold py-0.5 pr-1">مكتوب</td>
+              <td class="border border-black text-left py-0.5"></td>
             </tr>
 
             <tr>
-                <td class="border border-black">1</td>
-                <td class="border border-black text-left">Fiqih</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
+
+           <tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
+
+           <tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
+
+            <tr>
+              <td class="border border-black font-bold py-0.5">B</td>
+              <td class="border border-black text-left font-bold py-0.5 pl-1">Hafalan dan Membaca</td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right font-bold py-0.5 pr-1">مكتوب</td>
+              <td class="border border-black text-left py-0.5"></td>
             </tr>
 
             <tr>
-                <td class="border border-black">1</td>
-                <td class="border border-black text-left">Fiqih</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
+
+           <tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
+
+            <tr>
+              <td class="border border-black font-bold py-0.5">C</td>
+              <td class="border border-black text-left font-bold py-0.5 pl-1">Ekstrakulikuler</td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right font-bold py-0.5 pr-1">مكتوب</td>
+              <td class="border border-black text-left py-0.5"></td>
             </tr>
 
             <tr>
-                <td class="border border-black">1</td>
-                <td class="border border-black text-left">Fiqih</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
 
-            <tr>
-                <td class="border border-black">1</td>
-                <td class="border border-black text-left">Fiqih</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
+           <tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
 
-            <tr>
-                <td class="border border-black font-bold">B</td>
-                <td class="border border-black text-left font-bold">Hafalan dan Membaca</td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td dir="rtl" class="border border-black text-right"></td>
-                <td class="border border-black text-left"></td>
-            </tr>
+           <tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
 
-            <tr>
-                <td class="border border-black">2</td>
-                <td class="border border-black text-left">Juz Amma</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
-
-            <tr>
-                <td class="border border-black">2</td>
-                <td class="border border-black text-left">Juz Amma</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
-
-            <tr>
-                <td class="border border-black font-bold">C</td>
-                <td class="border border-black text-left font-bold">Ekstrakulikuler</td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td class="border border-black"></td>
-                <td dir="rtl" class="border border-black text-right"></td>
-                <td class="border border-black text-left"></td>
-            </tr>
-
-            <tr>
-                <td class="border border-black">3</td>
-                <td class="border border-black text-left">Hadrah</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
-
-            <tr>
-                <td class="border border-black">2</td>
-                <td class="border border-black text-left">Juz Amma</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
-
-            <tr>
-                <td class="border border-black">2</td>
-                <td class="border border-black text-left">Juz Amma</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
+           <tr>
+              <td class="border border-black py-0.5">1</td>
+              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
+              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 text-left pl-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+              <td class="border border-black py-0.5">-</td>
+           </tr>
             
 
             
 
             <!-- Ringkasan -->
-            <tr class="border-b border-black">
-            <td colspan="2" class="text-left px-1 border border-black">JUMLAH</td>
-            <td>‑</td>
-            <td class="border border-black">-</td>
-            <td rowspan="3" class="border border-black border-b-0">-</td>
-            <td dir="rtl" class="border border-black text-right">-</td>
-            <td class="border border-black">-</td>
-            <td dir="rtl" class="border border-black text-right">-</td>
-            <td class="border border-black">-</td>
-            </tr>
+            <!-- JUMLAH -->
+          <tr class="border-b border-black">
+            <td colspan="2" class="text-left px-1 border border-black py-0.5">JUMLAH</td>
+            <td class="py-0.5">‑</td>
+            <td class="border border-black py-0.5 text-left pl-1">-</td>
 
-            <tr class="border-b border-black">
-                <td colspan="2" class="text-left px-1 border border-black">RATA-RATA</td>
-                <td>‑</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
+            <!-- sel kosong untuk rowspan -->
+            <td rowspan="3" class="border border-black border-b-0 py-0.5"></td>
 
-            <tr>
-                <td colspan="2" class="text-left px-1 border border-black">RANKING</td>
-                <td class="border border-black">‑</td>
-                <td class="border border-black"></td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-                <td dir="rtl" class="border border-black text-right">-</td>
-                <td class="border border-black">-</td>
-            </tr>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+            <td class="border border-black py-0.5">-</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+            <td class="border border-black py-0.5">-</td>
+          </tr>
+
+          <!-- RATA‑RATA -->
+          <tr class="border-b border-black">
+            <td colspan="2" class="text-left px-1 border border-black py-0.5">RATA‑RATA</td>
+            <td class="py-0.5">‑</td>
+            <td class="border border-black py-0.5 pl-1 text-left">-</td>
+
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+            <td class="border border-black py-0.5">-</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+            <td class="border border-black py-0.5">-</td>
+          </tr>
+
+          <!-- RANKING -->
+          <tr>
+            <td colspan="2" class="text-left px-1 border border-black py-0.5">RANKING</td>
+            <td class="border border-black py-0.5">‑</td>
+            <td class="border border-black py-0.5 text-left pl-1">-</td>
+
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+            <td class="border border-black py-0.5">-</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
+            <td class="border border-black py-0.5">-</td>
+          </tr>
+
 
         </tbody>
     </table>
 
 
     <!-- Kepribadian & Absensi -->
-    <div class="grid grid-cols-2 gap-2 mt-2 text-[8pt]">
-      <table class="border border-black text-center">
-        <thead><tr><th colspan="2" class="border-b border-black">KEPRIBADIAN</th></tr></thead>
-        <tbody>
-          <tr><td class="text-left px-1 border-r border-black">Akhlak</td><td>‑</td></tr>
-          <tr><td class="text-left px-1 border-r border-black">Kerajinan</td><td>‑</td></tr>
-          <tr><td class="text-left px-1 border-r border-black">Kedisiplinan</td><td>‑</td></tr>
-          <tr><td class="text-left px-1 border-r border-black">Kerajinan</td><td>‑</td></tr>
-        </tbody>
-      </table>
-      <table class="border border-black text-center">
-        <thead><tr><th colspan="2" class="border-b border-black">Absensi</th></tr></thead>
-        <tbody>
-          <tr><td class="text-left px-1 border-r border-black">Sakit</td><td>‑</td></tr>
-          <tr><td class="text-left px-1 border-r border-black">Izin</td><td>‑</td></tr>
-          <tr><td class="text-left px-1 border-r border-black">Alpa</td><td>‑</td></tr>
-          <tr><td class="text-left px-1 border-r border-black">Jumlah</td><td>‑</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Grid 2 kolom (jika diperlukan di layout luar) -->
+    <div class="grid grid-cols-2 gap-10 mt-2 text-[9pt]">
+      <table class="text-[9pt] border border-black table-fixed mr-0.5">
+  <thead>
+    <tr class="divide-x divide-black">
+      <th class="font-semibold text-center border-b border-black w-43 py-0.5">
+        KEPRIBADIAN
+      </th>
+      <th class="font-semibold text-center border-b border-black py-0.5" dir="rtl">
+        احوال الطالب
+      </th>
+    </tr>
+  </thead>
 
-    <p class="text-[7pt] mt-1">Raport Semester … ( … )</p>
-  </div>
+  <tbody>
+    <!-- Baris 1 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Akhlaq</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">أخلاق</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Baris 2 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Kerajinan</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">حرفة</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Baris 3 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Kedisiplinan</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">تأديب</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Baris 4 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Kerapihan</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">نظافة</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+      <!--KOLOM 2-->
+      <table class="w-full text-[9pt] border border-black table-fixed">
+  <thead>
+    <tr class="divide-x divide-black">
+      <th class="font-semibold text-center border-b border-black py-0.5">
+        ABSENSI
+      </th>
+      <th class="font-semibold text-center border-b border-black py-0.5" dir="rtl">
+        كشف الغياب
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <!-- Baris 1 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Sakit</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">بعذر</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Baris 2 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Izin</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">بغير عذر</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Baris 3 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Alpa</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">بغير بيان</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+
+    <!-- Baris 4 -->
+    <tr class="divide-x divide-black">
+      <td class="pl-2 border-b border-black py-0.5">
+        <div class="grid grid-cols-3">
+          <span class="whitespace-nowrap">Jumlah</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+      <td class="pr-2 border-b border-black py-0.5" dir="rtl">
+        <div class="grid grid-cols-3">
+          <span class="text-right whitespace-nowrap">الجملة</span>
+          <span class="text-center">:</span>
+          <span class="text-center">-</span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+    <p class="absolute bottom-0 left-0 text-[8pt] my-2 ml-5">
+    Raport Semester … ( … )
+    </p>
+</div>
 </body>
 </html>

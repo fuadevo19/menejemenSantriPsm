@@ -32,9 +32,9 @@
     <!-- Nama Santri -->
     <div class="mt-10 w-80">
       <div class="text-[10pt] mb-9">NAMA SANTRI</div>
-      <h2 class="text-[14pt] font-bold mt-1 uppercase">A. SANUSI RIDWAN</h2>
+      <h2 class="text-[14pt] font-bold mt-1 uppercase">{{ $santri->nama_santri }}</h2>
       <hr class="w-full border-1">
-      <div class="text-[10pt] mt-2">Nomor Induk: 2307001/0</div>
+      <div class="text-[10pt] mt-2">Nomor Induk: {{ $santri->no_induk }}</div>
     </div>
   </div>
 </body>

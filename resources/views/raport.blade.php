@@ -30,17 +30,17 @@
       <div class="flex">
         <span class="min-w-[80px]">Nama Santri</span>
         <span class="w-2 text-center">:</span>
-        <span class="font-semibold flex-1">IMAM APDOL PADRI</span>
+        <span class="font-semibold flex-1">{{ $santri->nama_santri ?? '-' }}</span>
       </div>
       <div class="flex">
         <span class="min-w-[80px]">No. Induk</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">2307006</span>
+        <span class="flex-1">{{ $santri->no_induk ?? '-' }}</span>
       </div>
       <div class="flex">
         <span class="min-w-[80px]">Alamat</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">‑</span>
+        <span class="flex-1">{{ $santri->alamat->desa ?? '-' }}</span>
       </div>
     </div>
 
@@ -49,17 +49,17 @@
       <div class="flex">
         <span class="min-w-[90px]">Kelas</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">Ula Putri Awaliyah</span>
+        <span class="flex-1">{{ $santri->kelas->nama_kelas ?? '-' }}</span>
       </div>
       <div class="flex">
         <span class="min-w-[90px]">Semester</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">Semester 2 (Genap)</span>
+        <span class="flex-1">{{ $semester->nama_semester ?? '-' }}</span>
       </div>
       <div class="flex">
         <span class="min-w-[90px]">Tahun Pelajaran</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">2024/2025</span>
+        <span class="flex-1">{{ $tahunAjaranLabel}}</span>
       </div>
     </div>
   </div>
@@ -141,43 +141,37 @@
               <td class="border border-black text-left py-0.5"></td>
             </tr>
 
+            @foreach ($nilaiTertulis as $index => $nilai)
             <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
+                <td class="border border-black py-0.5">{{ $index + 1 }}</td>
+                <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
+                <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
+                <td class="border border-black py-0.5 text-left pl-1">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 font-bold">60</td>
+                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
+                <td class="border border-black py-0.5 font-bold">
+                    {{ $convertToArabic($nilai->nilai) }}
+                </td>
+                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{ $nilai->mataPelajaran->nama_pelajaran_arab ?? '-' }}</td>
+                <td class="border border-black py-0.5">
+                    {{ $convertToArabic($index + 1) }}
+                </td>
+            </tr>
+            @endforeach
+
+            <tr>
+              <td class="border border-black py-0.5 h-4.5"></td>
+              <td class="border border-black text-left py-0.5 pl-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5 text-left pl-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1"></td>
+              <td class="border border-black py-0.5"></td>
            </tr>
 
            <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-           </tr>
-
-           <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-           </tr>
-
-            <tr>
               <td class="border border-black font-bold py-0.5">B</td>
               <td class="border border-black text-left font-bold py-0.5 pl-1">Hafalan dan Membaca</td>
               <td class="border border-black py-0.5"></td>
@@ -185,33 +179,41 @@
               <td class="border border-black py-0.5"></td>
               <td class="border border-black py-0.5"></td>
               <td class="border border-black py-0.5"></td>
-              <td dir="rtl" class="border border-black text-right font-bold py-0.5 pr-1">مكتوب</td>
+              <td dir="rtl" class="border border-black text-right font-bold py-0.5 pr-1">حفظ ويقرأ</td>
               <td class="border border-black text-left py-0.5"></td>
             </tr>
 
+            @foreach ($nilaiHafalanMembaca as $index => $nilai)
             <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
+                <td class="border border-black py-0.5">{{ $index + 1 }}</td>
+                <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
+                <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
+                <td class="border border-black py-0.5 text-left pl-1">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 font-bold">60</td>
+                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
+                <td class="border border-black py-0.5 font-bold">
+                    {{ $convertToArabic($nilai->nilai) }}
+                </td>
+                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{ $nilai->mataPelajaran->nama_pelajaran_arab ?? '-' }}</td>
+                <td class="border border-black py-0.5">
+                    {{ $convertToArabic($index + 1) }}
+                </td>
+            </tr>
+            @endforeach
+
+
+            <tr>
+              <td class="border border-black py-0.5 h-4.5"></td>
+              <td class="border border-black text-left py-0.5 pl-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5 text-left pl-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1"></td>
+              <td class="border border-black py-0.5"></td>
            </tr>
 
-           <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-           </tr>
 
             <tr>
               <td class="border border-black font-bold py-0.5">C</td>
@@ -225,95 +227,79 @@
               <td class="border border-black text-left py-0.5"></td>
             </tr>
 
+            @foreach ($nilaiEkstrakurikuler as $index => $nilai)
             <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-           </tr>
+                <td class="border border-black py-0.5">{{ $index + 1 }}</td>
+                <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
+                <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
+                <td class="border border-black py-0.5 text-left pl-1">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 font-bold">60</td>
+                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
+                <td class="border border-black py-0.5 font-bold">
+                    {{ $convertToArabic($nilai->nilai) }}
+                </td>
+                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{ $nilai->mataPelajaran->nama_pelajaran_arab ?? '-' }}</td>
+                <td class="border border-black py-0.5">
+                    {{ $convertToArabic($index + 1) }}
+                </td>
+            </tr>
+            @endforeach
 
            <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
+              <td class="border border-black py-0.5 h-4.5"></td>
+              <td class="border border-black text-left py-0.5 pl-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td class="border border-black py-0.5 text-left pl-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1"></td>
+              <td class="border border-black py-0.5"></td>
+              <td dir="rtl" class="border border-black text-right py-0.5 pr-1"></td>
+              <td class="border border-black py-0.5"></td>
            </tr>
-
-           <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-           </tr>
-
-           <tr>
-              <td class="border border-black py-0.5">1</td>
-              <td class="border border-black text-left py-0.5 pl-1">Fiqih</td>
-              <td class="border border-black py-0.5">-</td>
-              <td class="border border-black py-0.5 text-left pl-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-              <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-              <td class="border border-black py-0.5">-</td>
-           </tr>
-            
-
             
 
             <!-- Ringkasan -->
             <!-- JUMLAH -->
           <tr class="border-b border-black">
-            <td colspan="2" class="text-left px-1 border border-black py-0.5">JUMLAH</td>
-            <td class="py-0.5">‑</td>
-            <td class="border border-black py-0.5 text-left pl-1">-</td>
+            <td colspan="2" class="text-left px-1 border border-black py-0.5 font-bold">JUMLAH</td>
+            <td class="py-0.5 font-bold">{{$totalNilai}}</td>
+            <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">
+              {{ $terbilang }}
+            </td>
 
             <!-- sel kosong untuk rowspan -->
             <td rowspan="3" class="border border-black border-b-0 py-0.5"></td>
 
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-            <td class="border border-black py-0.5">-</td>
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-            <td class="border border-black py-0.5">-</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$terbilangArab}}</td>
+            <td class="border border-black py-0.5 font-bold">{{$convertToArabic($totalNilai)}}</td>
+            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1">الجملة</td>
+            
           </tr>
 
           <!-- RATA‑RATA -->
           <tr class="border-b border-black">
             <td colspan="2" class="text-left px-1 border border-black py-0.5">RATA‑RATA</td>
-            <td class="py-0.5">‑</td>
-            <td class="border border-black py-0.5 pl-1 text-left">-</td>
+            <td class="py-0.5 font-bold">{{$rataRata}}</td>
+            <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">
+              {{ $rataRataIndo }}
+            </td>
 
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-            <td class="border border-black py-0.5">-</td>
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-            <td class="border border-black py-0.5">-</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$rataRataArab}}</td>
+            <td class="border border-black py-0.5 font-bold">{{$convertToArabic($rataRata)}}</td>
+            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1">معدل</td>
+            
           </tr>
 
           <!-- RANKING -->
           <tr>
             <td colspan="2" class="text-left px-1 border border-black py-0.5">RANKING</td>
-            <td class="border border-black py-0.5">‑</td>
-            <td class="border border-black py-0.5 text-left pl-1">-</td>
+            <td class="border border-black py-0.5 font-bold" >{{ $ranking }}</td>
+            <td class="border border-black py-0.5 text-left pl-1 font-bold">Dari {{$jumlahSantri}} Santri</td>
 
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-            <td class="border border-black py-0.5">-</td>
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">-</td>
-            <td class="border border-black py-0.5">-</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1 font-bold">من {{$terbilangArabJumlahSantri}} طالب</td>
+            <td class="border border-black py-0.5 font-bold">{{$convertToArabic($jumlahSantri)}}</td>
+            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1">الدرجة</td>
+            
           </tr>
 
 

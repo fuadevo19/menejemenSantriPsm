@@ -64,4 +64,9 @@ class Santri extends Model
     {
         return $this->hasOne(OrangTua::class)->where('tipe', 'ibu');
     }
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class);
+    }
 }

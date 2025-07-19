@@ -14,7 +14,7 @@ class TahunAjaran extends Model
         'label',
         'tahun_mulai',
         'tahun_selesai',
-        'kepala_madarasah',
+        'kepala_madrasah',
         'pengasuh',
     ];
 

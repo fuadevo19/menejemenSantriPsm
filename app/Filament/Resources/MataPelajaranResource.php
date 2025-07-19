@@ -55,9 +55,8 @@ class MataPelajaranResource extends Resource
                 ->label('Kategori')
                 ->options([
                     'Tertulis' => 'Tertulis',
-                    'Hafalan' => 'Hafalan',
-                    'Membaca' => 'Membaca',
-                    'Ekstrakulikuler' => 'Ekstrakulikuler',
+                    'Hafalan dan Membaca' => 'Hafalan dan Membaca',
+                    'Ekstrakurikuler' => 'Ekstrakurikuler',
                 ])
                 ->required()
                 ->searchable(),

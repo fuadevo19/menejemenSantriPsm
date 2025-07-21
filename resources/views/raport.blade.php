@@ -14,8 +14,8 @@
 <body class="bg-white text-[8.5pt] leading-tight p-4">
   <div class="border border-black h-full flex flex-col relative">
     <!-- Kop Lembaga (Logo + Teks) -->
-    <div class="items-center justify-center border-b border-black h-[90px]">
-      <img src="{{ asset('images/copPSM.png') }}" class="" alt="Logo"/>
+    <div class="items-center justify-center border-b border-black h-[90px] pt-0.3 px-0.3">
+      <img src="{{ asset('images/copPSM.png') }}" class="border border-black" alt="Logo"/>
     </div>
 
     <!-- Judul -->
@@ -49,12 +49,12 @@
       <div class="flex">
         <span class="min-w-[90px]">Kelas</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $santri->kelas->nama_kelas ?? '-' }}</span>
+        <span class="flex-1">{{ $kelas->nama_kelas ?? '-' }}</span>
       </div>
       <div class="flex">
         <span class="min-w-[90px]">Semester</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $semester->nama_semester ?? '-' }}</span>
+        <span class="flex-1">{{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})</span>
       </div>
       <div class="flex">
         <span class="min-w-[90px]">Tahun Pelajaran</span>
@@ -270,35 +270,39 @@
             <!-- sel kosong untuk rowspan -->
             <td rowspan="3" class="border border-black border-b-0 py-0.5"></td>
 
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$terbilangArab}}</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1 text-[8pt] max-w-[120px] break-words leading-tight">
+                {{ $terbilangArab }}
+            </td>
             <td class="border border-black py-0.5 font-bold">{{$convertToArabic($totalNilai)}}</td>
-            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1">الجملة</td>
+            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1 font-bold">الجملة</td>
             
           </tr>
 
           <!-- RATA‑RATA -->
           <tr class="border-b border-black">
-            <td colspan="2" class="text-left px-1 border border-black py-0.5">RATA‑RATA</td>
+            <td colspan="2" class="text-left px-1 border border-black py-0.5 font-bold">RATA‑RATA</td>
             <td class="py-0.5 font-bold">{{$rataRata}}</td>
             <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">
               {{ $rataRataIndo }}
             </td>
 
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$rataRataArab}}</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1 text-[8pt] max-w-[120px] break-words leading-tight">
+                {{ $rataRataArab }}
+            </td>
             <td class="border border-black py-0.5 font-bold">{{$convertToArabic($rataRata)}}</td>
-            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1">معدل</td>
+            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1 font-bold">معدل</td>
             
           </tr>
 
           <!-- RANKING -->
           <tr>
-            <td colspan="2" class="text-left px-1 border border-black py-0.5">RANKING</td>
+            <td colspan="2" class="text-left px-1 border border-black py-0.5 font-bold">RANKING</td>
             <td class="border border-black py-0.5 font-bold" >{{ $ranking }}</td>
             <td class="border border-black py-0.5 text-left pl-1 font-bold">Dari {{$jumlahSantri}} Santri</td>
 
-            <td dir="rtl" class="border border-black text-right py-0.5 pr-1 font-bold">من {{$terbilangArabJumlahSantri}} طالب</td>
+            <td dir="rtl" class="border border-black text-right py-0.5 pr-1 text-[8pt] max-w-[120px] break-words leading-tight font-bold">من {{$terbilangArabJumlahSantri}} طالب</td>
             <td class="border border-black py-0.5 font-bold">{{$convertToArabic($jumlahSantri)}}</td>
-            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1">الدرجة</td>
+            <td colspan="2" dir="rtl" class="border border-black text-right py-0.5 pr-1 font-bold">الدرجة</td>
             
           </tr>
 
@@ -313,10 +317,10 @@
       <table class="text-[9pt] border border-black table-fixed mr-0.5">
   <thead>
     <tr class="divide-x divide-black">
-      <th class="font-semibold text-center border-b border-black w-43 py-0.5">
+      <th class=" text-center border-b border-black w-43 py-0.5 font-bold">
         KEPRIBADIAN
       </th>
-      <th class="font-semibold text-center border-b border-black py-0.5" dir="rtl">
+      <th class=" text-center border-b border-black py-0.5 font-bold" dir="rtl">
         احوال الطالب
       </th>
     </tr>
@@ -329,14 +333,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Akhlaq</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{ $kepribadian->akhlaq ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">أخلاق</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$convertToArabic($kepribadian->akhlaq ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -347,14 +351,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Kerajinan</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$kepribadian->kerajinan ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">حرفة</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$convertToArabic($kepribadian->kerajinan ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -365,14 +369,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Kedisiplinan</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$kepribadian->kedisiplinan ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">تأديب</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$convertToArabic($kepribadian->kedisiplinan ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -383,14 +387,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Kerapihan</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$kepribadian->kerapihan ??'-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">نظافة</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$convertToArabic($kepribadian->kerapihan ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -402,10 +406,10 @@
       <table class="w-full text-[9pt] border border-black table-fixed">
   <thead>
     <tr class="divide-x divide-black">
-      <th class="font-semibold text-center border-b border-black py-0.5">
+      <th class=" text-center border-b border-black py-0.5 font-bold">
         ABSENSI
       </th>
-      <th class="font-semibold text-center border-b border-black py-0.5" dir="rtl">
+      <th class="font-bold text-center border-b border-black py-0.5" dir="rtl">
         كشف الغياب
       </th>
     </tr>
@@ -418,14 +422,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Sakit</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center ">{{$absensi->sakit ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">بعذر</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center">{{$convertToArabic($absensi->sakit ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -436,14 +440,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Izin</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center">{{$absensi->izin ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">بغير عذر</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center">{{$convertToArabic($absensi->izin ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -454,14 +458,14 @@
         <div class="grid grid-cols-3">
           <span class="whitespace-nowrap">Alpa</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center">{{$absensi->alpha ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
           <span class="text-right whitespace-nowrap">بغير بيان</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center">{{$convertToArabic($absensi->alpha ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -470,16 +474,16 @@
     <tr class="divide-x divide-black">
       <td class="pl-2 border-b border-black py-0.5">
         <div class="grid grid-cols-3">
-          <span class="whitespace-nowrap">Jumlah</span>
+          <span class="whitespace-nowrap font-bold">Jumlah</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$totalAbsensi ?? '-'}}</span>
         </div>
       </td>
       <td class="pr-2 border-b border-black py-0.5" dir="rtl">
         <div class="grid grid-cols-3">
-          <span class="text-right whitespace-nowrap">الجملة</span>
+          <span class="text-right whitespace-nowrap font-bold">الجملة</span>
           <span class="text-center">:</span>
-          <span class="text-center">-</span>
+          <span class="text-center font-bold">{{$convertToArabic($totalAbsensi ?? 0) ?? '-'}}</span>
         </div>
       </td>
     </tr>
@@ -489,7 +493,7 @@
 
 
     <p class="absolute bottom-0 left-0 text-[8pt] my-2 ml-5">
-    Raport Semester … ( … )
+    Raport {{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})
     </p>
 </div>
 </body>

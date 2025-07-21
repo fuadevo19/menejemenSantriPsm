@@ -2,154 +2,131 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
+use App\Models\Nilai;
 use App\Models\Santri;
+use App\Models\Absensi;
+use App\Models\Semester;
+use Illuminate\Http\Request;
+use App\Models\KepribadianSantri;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\This;
 
 class RaportController extends Controller
 {
-    public function show(Santri $santri)
-{
-    // Ambil nilai terbaru dengan relasi semester, tahun_ajaran, dan mata_pelajaran
-    $nilaiTerbaru = $santri->nilai()
-        ->with(['semester', 'tahunAjaran', 'mataPelajaran'])
-        ->latest()
-        ->first();
+    public function show(Santri $santri, $semester )
+{   
+     // Ambil data semester dari route
+    $semester = Semester::findOrFail($semester);
+    $semesterLabel = $semester->semester;
 
-    // Ambil semester dan tahun ajaran
-    $semester = $nilaiTerbaru?->semester;
-    $tahunAjaranLabel = $nilaiTerbaru?->tahunAjaran?->label ?? '-';
+    // Ambil tahun ajaran dari relasi Semester
+    $tahunAjaranId = $semester->tahun_ajaran_id;
+    $tahunAjaranLabel = $semester->tahunAjaran?->label;
 
-    // Ambil semua nilai santri untuk semester yang sama, dan pelajaran kategori Tertulis
+    // Ambil kelas dari data nilai
+    $kelasId = Nilai::where('santri_id', $santri->id)
+        ->where('semester_id', $semester->id)
+        ->value('kelas_id');
+
+    $kelas = Kelas::find($kelasId);
+
+    // Ambil semua nilai santri berdasarkan semester yang ada di route
     $nilaiTertulis = $santri->nilai()
         ->with('mataPelajaran')
-        ->whereHas('mataPelajaran', function ($query) {
-            $query->where('kategori', 'Tertulis');
-        })
-        ->where('semester_id', $semester?->id)
+        ->whereHas('mataPelajaran', fn($q) => $q->where('kategori', 'Tertulis'))
+        ->where('semester_id', $semester->id)
         ->orderBy('mata_pelajaran_id')
         ->get();
 
-    // Ambil nilai kategori Ekstrakurikuler
     $nilaiEkstrakurikuler = $santri->nilai()
         ->with('mataPelajaran')
-        ->whereHas('mataPelajaran', function ($query) {
-            $query->where('kategori', 'Ekstrakurikuler');
-        })
-        ->where('semester_id', $semester?->id)
+        ->whereHas('mataPelajaran', fn($q) => $q->where('kategori', 'Ekstrakurikuler'))
+        ->where('semester_id', $semester->id)
         ->orderBy('mata_pelajaran_id')
         ->get();
 
-    // Ambil nilai kategori "Hafalan dan Membaca"
     $nilaiHafalanMembaca = $santri->nilai()
         ->with('mataPelajaran')
-        ->whereHas('mataPelajaran', function ($query) {
-            $query->where('kategori', 'Hafalan dan Membaca');
-        })
-        ->where('semester_id', $semester?->id)
+        ->whereHas('mataPelajaran', fn($q) => $q->where('kategori', 'Hafalan dan Membaca'))
+        ->where('semester_id', $semester->id)
         ->orderBy('mata_pelajaran_id')
         ->get();
-    
 
-    //fungsi untuk niai terbilang
-    $nilaiTertulis = $nilaiTertulis->map(function ($item) {
-    $item->terbilang = $this->terbilangIndo($item->nilai);
-    $item->terbilang_arab = $this->terbilangArab($item->nilai); // arab
-    return $item;
-    });
+    // Format nilai ke dalam terbilang Indo & Arab
+    foreach ([$nilaiTertulis, $nilaiEkstrakurikuler, $nilaiHafalanMembaca] as $collection) {
+        $collection->transform(function ($item) {
+            $item->terbilang = $this->terbilangIndo($item->nilai);
+            $item->terbilang_arab = $this->terbilangArab($item->nilai);
+            return $item;
+        });
+    }
 
-    $nilaiHafalanMembaca = $nilaiHafalanMembaca->map(function ($item) {
-        $item->terbilang = $this->terbilangIndo($item->nilai);
-        $item->terbilang_arab = $this->terbilangArab($item->nilai);
-        return $item;
-    });
+    // Konversi angka ke angka arab (fungsi bantu)
+    $convertToArabic = fn($number) => implode('', array_map(fn($d) => ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'][$d], str_split((string)$number)));
 
-    $nilaiEkstrakurikuler = $nilaiEkstrakurikuler->map(function ($item) {
-        $item->terbilang = $this->terbilangIndo($item->nilai);
-        $item->terbilang_arab = $this->terbilangArab($item->nilai);
-        return $item;
-    });
-
-
-    // Fungsi bantu untuk ubah angka ke angka Arab
-    $convertToArabic = function ($number) {
-        $arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-        return implode('', array_map(function ($digit) use ($arabicDigits) {
-            return $arabicDigits[$digit];
-        }, str_split((string) $number)));
-    };
-
-    $totalNilai = $nilaiTertulis->sum('nilai') 
-             + $nilaiHafalanMembaca->sum('nilai') 
-             + $nilaiEkstrakurikuler->sum('nilai');
-
-    //hitung rata rata
-    $totalItem = $nilaiTertulis->count() 
-            + $nilaiHafalanMembaca->count() 
-            + $nilaiEkstrakurikuler->count();
-
+    // Total nilai & rata-rata
+    $totalNilai = $nilaiTertulis->sum('nilai') + $nilaiHafalanMembaca->sum('nilai') + $nilaiEkstrakurikuler->sum('nilai');
+    $totalItem = $nilaiTertulis->count() + $nilaiHafalanMembaca->count() + $nilaiEkstrakurikuler->count();
     $rataRata = $totalItem > 0 ? round($totalNilai / $totalItem, 2) : 0;
 
     $rataRataIndo = $this->terbilangIndo($rataRata);
     $rataRataArab = $this->terbilangArab($rataRata);
-             
     $terbilang = $this->terbilangUtama($totalNilai);
     $terbilangArab = $this->terbilangArab($totalNilai);
-    
 
-    //hitung ranking
-    // Ambil data kelas dan tahun ajaran dari santri yang sedang ditampilkan
-    $kelasId = $santri->kelas_id;
-    $tahunAjaranId = $santri->nilai->first()->tahun_ajaran_id ?? null;
+    // Ambil salah satu nilai untuk santri ini di semester tersebut (agar dapat kelas_id dan tahun_ajaran_id)
+    $nilaiSantri = Nilai::where('santri_id', $santri->id)
+        ->where('semester_id', $semester->id)
+        ->first();
 
-    if ($tahunAjaranId) {
-        // Ambil semua total nilai santri di kelas dan tahun ajaran yang sama
-        $rankingData = \App\Models\Nilai::selectRaw('santri_id, SUM(nilai) as total_nilai')
+    $ranking = null;
+    $jumlahSantri = 0;
+
+    if ($nilaiSantri) {
+        $kelasId = $nilaiSantri->kelas_id;
+        $tahunAjaranId = $nilaiSantri->tahun_ajaran_id;
+
+        // Ambil total nilai tiap santri dalam satu kelas, semester, dan tahun ajaran
+        $rankingData = Nilai::selectRaw('santri_id, SUM(nilai) as total_nilai')
             ->where('kelas_id', $kelasId)
+            ->where('semester_id', $semester->id)
             ->where('tahun_ajaran_id', $tahunAjaranId)
             ->groupBy('santri_id')
             ->orderByDesc('total_nilai')
             ->get();
 
-        // Hitung jumlah santri yang dihitung
         $jumlahSantri = $rankingData->count();
 
-        // Ambil ranking dari santri yang sedang tampil
-        $ranking = $rankingData->search(function ($item) use ($santri) {
-            return $item->santri_id == $santri->id;
-        });
-
+        // Cari ranking santri
+        $ranking = $rankingData->search(fn($item) => $item->santri_id == $santri->id);
         $ranking = $ranking !== false ? $ranking + 1 : null;
-            } else {
-                $ranking = null;
-                $jumlahSantri = 0;
-            }
+    }
 
+    // Konversi ke Arab
     $terbilangArabJumlahSantri = $this->terbilangArab($jumlahSantri);
 
-    // Kirim ke view
-    return view('raport', [
-        'santri' => $santri,
-        'semester' => $semester,
-        'tahunAjaranLabel' => $tahunAjaranLabel,
-        'nilaiTertulis' => $nilaiTertulis,
-        'nilaiHafalanMembaca' => $nilaiHafalanMembaca, // dikirim ke blade
-        'nilaiEkstrakurikuler'=> $nilaiEkstrakurikuler,
-        'convertToArabic' => $convertToArabic,
+    // Kepribadian
+    $kepribadian = KepribadianSantri::where('santri_id', $santri->id)
+        ->where('semester_id', $semester->id)
+        ->first();
 
-        
-        'totalNilai' => $totalNilai,
-        'terbilang' => $terbilang,
-        'terbilangArab' => $terbilangArab,
-        'rataRata' => $rataRata,
-        'rataRataArab' => $rataRataArab,
-        'rataRataIndo' => $rataRataIndo,
-        'jumlahSantri' => $jumlahSantri,
-        'ranking' => $ranking,
-        'terbilangArabJumlahSantri' => $terbilangArabJumlahSantri,
-    ]);
+    // Absensi
+    $absensi = Absensi::where('santri_id', $santri->id)
+        ->where('semester_id', $semester->id)
+        ->first() ?? new Absensi(['sakit' => 0, 'izin' => 0, 'alpha' => 0]);
+
+    $totalAbsensi = $absensi->sakit + $absensi->izin + $absensi->alpha;
+
+    return view('raport', compact(
+        'santri', 'semester', 'tahunAjaranLabel',
+        'nilaiTertulis', 'nilaiHafalanMembaca', 'nilaiEkstrakurikuler',
+        'convertToArabic', 'totalNilai', 'terbilang', 'terbilangArab',
+        'rataRata', 'rataRataArab', 'rataRataIndo',
+        'jumlahSantri', 'ranking', 'terbilangArabJumlahSantri',
+        'kepribadian', 'absensi', 'totalAbsensi', 'semesterLabel', 'kelas'
+    ));
 }
 
  public function terbilangIndo($number)
@@ -249,6 +226,52 @@ function terbilangArab($number)
 }
 
 
+public function pengesahan(Santri $santri, $semester)
+{
+    
+    // Ambil data semester dari route
+    $semester = Semester::findOrFail($semester);
+    $semesterLabel = $semester->semester;
 
+    // Ambil data nilai berdasarkan santri dan semester
+    $nilai = Nilai::where('santri_id', $santri->id)
+        ->where('semester_id', $semester->id)
+        ->first();
+
+    // Ambil tahun ajaran dan labelnya
+    $tahunAjaranId = $nilai?->tahun_ajaran_id;
+    $tahunAjaranLabel = $nilai?->tahunAjaran?->label;
+
+    // Ambil kelas dari nilai
+    $kelasId = $nilai?->kelas_id;
+    $kelas = $kelasId ? Kelas::find($kelasId) : null;
+
+    // Ambil data santri
+    $namaSantri = $santri->nama_santri ?? '-';
+    $noInduk = $santri->no_induk ?? '-';
+    $alamatDesa = $santri->alamat->desa ?? '-'; // Pastikan kolom `desa` ada di tabel `santris`
+
+    // Ambil wali kelas dari relasi kelas
+    $waliKelas = $kelas?->wali_kelas ?? '-';
+    
+    // Ambil kepala madrasah dan pengasuh
+    $tahunAjaran = $nilai?->tahunAjaran;
+    $kepalaMadrasah = $tahunAjaran?->kepala_madrasah ?? '-';
+    $pengasuh = $tahunAjaran?->pengasuh ?? '-';
+    
+    
+    // Kirim ke view
+    return view('pengesahan', compact(
+        'semesterLabel',
+        'semester',
+        'tahunAjaranLabel',
+        'kelas',
+        'namaSantri',
+        'noInduk',
+        'alamatDesa',
+        'waliKelas', 'kepalaMadrasah', 'pengasuh'
+    ));
 }
+}
+
 

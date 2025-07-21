@@ -22,11 +22,10 @@ Route::get('/cover/{santri}', function (Santri $santri) {
     return view('cover', compact('santri'));
 });
 
-Route::get('/raport/{santri}', [RaportController::class, 'show']);
+Route::get('/raport/{santri}/{semester}', [RaportController::class, 'show']);
 
-Route::get('/pengesahan', function(){
-    return view('pengesahan');
-});
+
+Route::get('/pengesahan/{santri}/{semester}', [RaportController::class, 'pengesahan']);
 
 Route::get('/raport/preview', function () {
     return view('cover'); // Menampilkan resources/views/cover.blade.php

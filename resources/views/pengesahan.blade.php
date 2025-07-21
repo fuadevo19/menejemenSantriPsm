@@ -15,8 +15,8 @@
 <body class="bg-white text-[8.5pt] leading-tight p-4">
 <div class="border border-black h-full flex flex-col relative">
     <!-- Kop Lembaga (Logo + Teks) -->
-    <div class="items-center justify-center h-[90px] px-0.4 py-0.4">
-    <img src="{{ asset('images/copPSM.png') }}" class="" alt="Logo"/>
+    <div class="items-center justify-center h-[90px] px-0.4 py-0.4 border border-black">
+    <img src="{{ asset('images/copPSM.png') }}" alt="Logo"/>
     </div>
 
     <!-- Judul -->
@@ -31,17 +31,17 @@
         <div class="flex">
             <span class="min-w-[80px]">Nama Santri</span>
             <span class="w-2 text-center">:</span>
-            <span class="font-semibold flex-1">IMAM APDOL PADRI</span>
+            <span class="font-semibold flex-1">{{$namaSantri}}</span>
         </div>
         <div class="flex">
             <span class="min-w-[80px]">No. Induk</span>
             <span class="w-2 text-center">:</span>
-            <span class="flex-1">2307006</span>
+            <span class="flex-1">{{ $noInduk }}</span>
         </div>
         <div class="flex">
             <span class="min-w-[80px]">Alamat</span>
             <span class="w-2 text-center">:</span>
-            <span class="flex-1">‑</span>
+            <span class="flex-1">{{ $alamatDesa }}</span>
         </div>
         </div>
 
@@ -50,17 +50,17 @@
         <div class="flex">
             <span class="min-w-[90px]">Kelas</span>
             <span class="w-2 text-center">:</span>
-            <span class="flex-1">Ula Putri Awaliyah</span>
+            <span class="flex-1">{{ $kelas->nama_kelas ?? '-' }}</span>
         </div>
         <div class="flex">
             <span class="min-w-[90px]">Semester</span>
             <span class="w-2 text-center">:</span>
-            <span class="flex-1">Semester 2 (Genap)</span>
+            <span class="flex-1">{{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})</span>
         </div>
         <div class="flex">
             <span class="min-w-[90px]">Tahun Pelajaran</span>
             <span class="w-2 text-center">:</span>
-            <span class="flex-1">2024/2025</span>
+            <span class="flex-1">{{ $tahunAjaranLabel}}</span>
         </div>
         </div>
     </div>
@@ -146,7 +146,7 @@
             </tr>
         </tbody>
 
-        <div class=" absolute grid grid-cols-3 gap-20 text-center mt-40 text-[10pt] pl-12">
+        <div class="absolute grid grid-cols-3 gap-10 justify-center text-center mt-40 text-[10pt] w-full px-10 -ml-5">
             <!-- Kolom 1: Orang Tua -->
             <div>
                 <div class="font-semibold">Orang Tua/Wali</div>
@@ -156,21 +156,21 @@
             <!-- Kolom 2: Guru Wali Kelas -->
             <div>
                 <div class="font-semibold">Guru Wali Kelas</div>
-                <div class="mt-12 font-bold underline">SITI RAHMAWATI, S. Pd</div>
+                <div class="mt-12 font-bold underline">{{$waliKelas}}</div>
                 <div class="text-xs mt-1">NIP. -</div>
             </div>
 
             <!-- Kolom 3: Kepala Madrasah -->
             <div>
                 <div class="font-semibold">Kepala Madrasah</div>
-                <div class="mt-12 font-bold underline">SYAMSUL HADI, S. Pd</div>
+                <div class="mt-12 font-bold underline">{{$kepalaMadrasah}}</div>
                 <div class="text-xs mt-1">NIP. -</div>
             </div>
         </div>
-        <div class="absolute text-center w-full mt-[18.5rem] text-[10pt] -ml-9">
+        <div class="absolute text-center w-full mt-[18.5rem] text-[10pt] -ml-5">
         <div>
-            <div class="font-semibold">Mengetahu, <br><span>Madrasah</span></div>
-            <div class="mt-12 font-bold underline">SYAMSUL HADI, S. Pd</div>
+            <div class="font-semibold">Mengetahui, <br><span>Pengasuh</span></div>
+            <div class="mt-12 font-bold underline">{{$pengasuh}}</div>
             <div class="text-xs mt-1">NIP. -</div>
         </div>
         </div>
@@ -183,7 +183,7 @@
         </p>
                 
         <p class="absolute bottom-0 left-0 text-[8pt] my-2 ml-5">
-        Raport Semester … ( … )
+        Raport {{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})
         </p>
     </div>
 </div>

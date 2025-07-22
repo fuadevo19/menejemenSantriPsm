@@ -52,7 +52,7 @@
               <div class="">-Desa<span class="ml-10 mr-2">:</span>{{ $santri->alamat->desa ?? '-' }}</div>
               <div class="">-Kecamatan<span class="ml-1 mr-2">:</span >{{ $santri->alamat->kecamatan ?? '-' }}</div>
             </div>
-            <div class="ml-20">
+            <div class="ml-10">
               <div>-Kabupaten<span class="ml-1 mr-2">:</span >{{ $santri->alamat->kabupaten ?? '-' }}</div>
               <div class="">-Provinsi<span class="ml-5 mr-2">:</span>{{ $santri->alamat->provinsi ?? '-' }}</div>
               <div class="">-KodePos<span class="ml-4 mr-2">:</span>{{ $santri->alamat->kode_pos ?? '-' }}</div>
@@ -108,8 +108,15 @@
       <!-- Signature & Photo -->
       <div class="flex justify-between mt-8 mr-24 ml-1">
         <div class="border border-gray-400 w-[90px] h-[120px] flex items-center justify-center text-[8pt] leading-tight text-center ml-6">Photo<br/>3 × 4</div>
-        <div class="text-center text-[10pt]">
-          Way Kanan, .....................................<br/>
+        <div class="text-center text-[10pt] ml-10">
+          <span class="ml-11" >Way Kanan, <input 
+      type="text" 
+      placeholder="Edit: Tanggal" 
+      class="w-auto border-gray-400 outline-none" 
+      oninput="resizeInput(this)" 
+      size="1"
+    ><br/>
+  </span></span>
           Kepala Madrasah<br/><br/><br/>
           <span class="font-semibold underline">{{ $tahunAjaran->kepala_madrasah ?? '-' }}</span><br/>
           NIP.
@@ -117,5 +124,16 @@
       </div>
     </div>
   </div>
+  <button 
+    onclick="window.print()" 
+    class="fixed top-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow print:hidden"
+    >
+    🖨️ Print A4
+    </button>
+    <script>
+  function resizeInput(input) {
+    input.size = input.value.length > 0 ? input.value.length : 1;
+  }
+</script>
 </body>
 </html>

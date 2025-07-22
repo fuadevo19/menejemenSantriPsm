@@ -14,8 +14,8 @@
 <body class="bg-white text-[8.5pt] leading-tight p-4">
   <div class="border border-black h-full flex flex-col relative">
     <!-- Kop Lembaga (Logo + Teks) -->
-    <div class="items-center justify-center border-b border-black h-[90px] pt-0.3 px-0.3">
-      <img src="{{ asset('images/copPSM.png') }}" class="border border-black" alt="Logo"/>
+    <div class="items-center justify-center  h-[90px] pt-0.3 px-0.3">
+      <img src="{{ asset('images/copPSM.png') }}"  alt="Logo"/>
     </div>
 
     <!-- Judul -->
@@ -54,12 +54,12 @@
       <div class="flex">
         <span class="min-w-[90px]">Semester</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})</span>
+        <span class="flex-1">{{ $semester->nama_semester ?? '-' }} ({{$semesterLabel ?? '-'}})</span>
       </div>
       <div class="flex">
         <span class="min-w-[90px]">Tahun Pelajaran</span>
         <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $tahunAjaranLabel}}</span>
+        <span class="flex-1">{{ $tahunAjaranLabel ?? '-'}}</span>
       </div>
     </div>
   </div>
@@ -91,10 +91,10 @@
       KKM
     </th>
     <th colspan="2" class="border border-black py-0.5" dir="rtl">
-      الدّرجاتُ النّهائية
+       الدرجات العقلية
     </th>
     <th colspan="2" rowspan="2" class="w-6 border border-black py-0.5" dir="rtl">
-      الموادّ الدراسيّة
+       المواد الدراسية
     </th>
   </tr>
 
@@ -106,10 +106,10 @@
       Huruf
     </th>
     <th class="w-10 border-r border-b border-black py-0.5" dir="rtl">
-      كتابةً
+      كتابة
     </th>
     <th class="w-10 border-r border-b border-black py-0.5" dir="rtl">
-      رقماً
+      رقما
     </th>
   </tr>
 </thead>
@@ -143,18 +143,18 @@
 
             @foreach ($nilaiTertulis as $index => $nilai)
             <tr>
-                <td class="border border-black py-0.5">{{ $index + 1 }}</td>
+                <td class="border border-black py-0.5">{{ $index + 1 ?? '-'}}</td>
                 <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
-                <td class="border border-black py-0.5 text-left pl-1">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">60</td>
                 <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
-                    {{ $convertToArabic($nilai->nilai) }}
+                    {{ $convertToArabic($nilai->nilai) ?? '-'}}
                 </td>
                 <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{ $nilai->mataPelajaran->nama_pelajaran_arab ?? '-' }}</td>
                 <td class="border border-black py-0.5">
-                    {{ $convertToArabic($index + 1) }}
+                    {{ $convertToArabic($index + 1) ?? '-'}}
                 </td>
             </tr>
             @endforeach
@@ -188,7 +188,7 @@
                 <td class="border border-black py-0.5">{{ $index + 1 }}</td>
                 <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
-                <td class="border border-black py-0.5 text-left pl-1">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang }}</td>
                 <td class="border border-black py-0.5 font-bold">60</td>
                 <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
@@ -232,7 +232,7 @@
                 <td class="border border-black py-0.5">{{ $index + 1 }}</td>
                 <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
-                <td class="border border-black py-0.5 text-left pl-1">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang }}</td>
                 <td class="border border-black py-0.5 font-bold">60</td>
                 <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
@@ -493,8 +493,14 @@
 
 
     <p class="absolute bottom-0 left-0 text-[8pt] my-2 ml-5">
-    Raport {{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})
+    Raport {{ $semester->nama_semester ?? '-' }} ({{$semesterLabel ?? '-'}})
     </p>
 </div>
+    <button 
+    onclick="window.print()" 
+    class="fixed top-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow print:hidden"
+    >
+    🖨️ Print A4
+    </button>
 </body>
 </html>

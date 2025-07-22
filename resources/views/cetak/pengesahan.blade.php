@@ -15,7 +15,7 @@
 <body class="bg-white text-[8.5pt] leading-tight p-4">
 <div class="border border-black h-full flex flex-col relative">
     <!-- Kop Lembaga (Logo + Teks) -->
-    <div class="items-center justify-center h-[90px] px-0.4 py-0.4 border border-black">
+    <div class="items-center justify-center h-[90px] px-0.4 py-0.4 ">
     <img src="{{ asset('images/copPSM.png') }}" alt="Logo"/>
     </div>
 
@@ -92,10 +92,10 @@
             KKM
             </th>
             <th colspan="2" class="border border-black py-0.5" dir="rtl">
-            الدّرجاتُ النّهائية
+             الدرجات العقلية
             </th>
             <th colspan="2" rowspan="2" class="w-6 border border-black py-0.5" dir="rtl">
-            الموادّ الدراسيّة
+             المواد الدراسية
             </th>
             </tr>
 
@@ -107,10 +107,10 @@
                 Huruf
                 </th>
                 <th class="w-10 border-r border-b border-black py-0.5" dir="rtl">
-                كتابةً
+                كتابة
                 </th>
                 <th class="w-10 border-r border-b border-black py-0.5" dir="rtl">
-                رقماً
+                رقما
                 </th>
             </tr>
         </thead>
@@ -137,16 +137,18 @@
             </tr>
 
             <tr>
-            <td colspan="4" rowspan="2" class="border border-black font-bold py-0.5 h-15"></td>
-            <td colspan="4" class="border border-black py-0.5 h-10"></td>
+            <td colspan="4" rowspan="2" class="border border-black px-0.5 h-15 align-top">
+                <textarea name="catatan_guru" maxlength="135" class="w-full h-full resize-none outline-none p-1 text-[10pt] italic" placeholder="Edit: Catatan guru..."></textarea>
+            </td>
+            <td colspan="4" class="border border-black px-0.5 h-10 text-left">Berdasarkan hasil yang dicapai pada {{$semester->nama_semester}} Santri, maka dinyatakan:</td>
             </tr>
 
             <tr>
-            <td colspan="4" class="border border-black py-0.5"></td>
+            <td colspan="4" class="border border-black py-0.5 text-left px-0.5"><input type="text" placeholder="Edit: Naik Kelas" class="w-25 mr-6 italic"></td>
             </tr>
         </tbody>
 
-        <div class="absolute grid grid-cols-3 gap-10 justify-center text-center mt-40 text-[10pt] w-full px-10 -ml-5">
+        <div class="absolute grid grid-cols-3 gap-10 justify-center text-center mt-42 text-[10pt] w-full px-10 -ml-5">
             <!-- Kolom 1: Orang Tua -->
             <div>
                 <div class="font-semibold">Orang Tua/Wali</div>
@@ -174,18 +176,25 @@
             <div class="text-xs mt-1">NIP. -</div>
         </div>
         </div>
+             
 
-
-        
-
-        <p class="absolute w-full h-7 text-right mt-[8.25rem] pr-10 text-[9pt]">
-             Way Kanan, .......
+        <p class="absolute w-full h-7 text-right mt-[8.25rem] text-[9pt]">
+             Way Kanan, <input type="text" placeholder="Edit: Tanggal" class="w-25 mr-6">
         </p>
                 
         <p class="absolute bottom-0 left-0 text-[8pt] my-2 ml-5">
         Raport {{ $semester->nama_semester ?? '-' }} ({{$semesterLabel}})
         </p>
     </div>
+    
 </div>
+    <button 
+    onclick="window.print()" 
+    class="fixed top-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow print:hidden"
+    >
+    🖨️ Print A4
+    </button>
+
+
 </body>
 </html>

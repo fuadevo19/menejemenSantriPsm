@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Santri;
+use App\Models\Semester;
 use App\Models\TahunAjaran;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RaportController;
@@ -11,26 +12,13 @@ Route::get('/', function () {
 
 });
 
-Route::get('/datadiri/{santri}', function (Santri $santri) {
-    $tahunAjaran = TahunAjaran::latest()->first();
-
-    return view('datadiri', compact('santri', 'tahunAjaran'));
-});
+Route::get('/datadiri/{santri}', [RaportController::class, 'dataDiri']);
 
 
-Route::get('/cover/{santri}', function (Santri $santri) {
-    return view('cover', compact('santri'));
-});
+Route::get('/cover/{santri}', [RaportController::class, 'cover']);
+
 
 Route::get('/raport/{santri}/{semester}', [RaportController::class, 'show']);
 
 
 Route::get('/pengesahan/{santri}/{semester}', [RaportController::class, 'pengesahan']);
-
-Route::get('/raport/preview', function () {
-    return view('cover'); // Menampilkan resources/views/cover.blade.php
-})->name('preview.raport');
-
-Route::get('/preview', function(){
-    return view('preview');
-});

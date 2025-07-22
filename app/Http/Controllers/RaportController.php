@@ -7,6 +7,7 @@ use App\Models\Nilai;
 use App\Models\Santri;
 use App\Models\Absensi;
 use App\Models\Semester;
+use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 use App\Models\KepribadianSantri;
 use Illuminate\Support\Collection;
@@ -21,9 +22,20 @@ class RaportController extends Controller
     $semester = Semester::findOrFail($semester);
     $semesterLabel = $semester->semester;
 
-    // Ambil tahun ajaran dari relasi Semester
-    $tahunAjaranId = $semester->tahun_ajaran_id;
-    $tahunAjaranLabel = $semester->tahunAjaran?->label;
+        // Ambil salah satu nilai
+    $nilaiSantri = Nilai::where('santri_id', $santri->id)
+        ->where('semester_id', $semester->id)
+        ->first();
+
+    $tahunAjaranLabel = null;
+    $tahunAjaranId = null;
+
+    if ($nilaiSantri) {
+        $tahunAjaranId = $nilaiSantri->tahun_ajaran_id;
+
+        $tahunAjaran = TahunAjaran::find($tahunAjaranId);
+        $tahunAjaranLabel = $tahunAjaran?->label;
+    }
 
     // Ambil kelas dari data nilai
     $kelasId = Nilai::where('santri_id', $santri->id)
@@ -74,7 +86,7 @@ class RaportController extends Controller
     $rataRataIndo = $this->terbilangIndo($rataRata);
     $rataRataArab = $this->terbilangArab($rataRata);
     $terbilang = $this->terbilangUtama($totalNilai);
-    $terbilangArab = $this->terbilangArab($totalNilai);
+    $terbilangArab = $this->terbilangArab100to2000($totalNilai);
 
     // Ambil salah satu nilai untuk santri ini di semester tersebut (agar dapat kelas_id dan tahun_ajaran_id)
     $nilaiSantri = Nilai::where('santri_id', $santri->id)
@@ -119,13 +131,13 @@ class RaportController extends Controller
 
     $totalAbsensi = $absensi->sakit + $absensi->izin + $absensi->alpha;
 
-    return view('raport', compact(
+    return view('cetak.raport', compact(
         'santri', 'semester', 'tahunAjaranLabel',
         'nilaiTertulis', 'nilaiHafalanMembaca', 'nilaiEkstrakurikuler',
         'convertToArabic', 'totalNilai', 'terbilang', 'terbilangArab',
         'rataRata', 'rataRataArab', 'rataRataIndo',
         'jumlahSantri', 'ranking', 'terbilangArabJumlahSantri',
-        'kepribadian', 'absensi', 'totalAbsensi', 'semesterLabel', 'kelas'
+        'kepribadian', 'absensi', 'totalAbsensi', 'semesterLabel', 'kelas', 'santri'
     ));
 }
 
@@ -187,43 +199,106 @@ private function terbilangUtama($number)
 
 //terbilang bahasa arab
 
-function terbilangArab($number)
+public function terbilangArab($number)
 {
-    $angka = [
+    $satuan = [
         "", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة",
-        "ستة", "سبعة", "ثمانية", "تسعة", "عشرة", "أحد عشر"
+        "ستة", "سبعة", "ثمانية", "تسعة"
     ];
 
-    if (!is_numeric($number)) return $number;
+    $belasan = [
+        10 => "عشرة",
+        11 => "أحد عشر",
+        12 => "اثنا عشر",
+        13 => "ثلاثة عشر",
+        14 => "أربعة عشر",
+        15 => "خمسة عشر",
+        16 => "ستة عشر",
+        17 => "سبعة عشر",
+        18 => "ثمانية عشر",
+        19 => "تسعة عشر"
+    ];
 
-    $number = floatval($number);
+    $puluhan = [
+        2 => "عشرون",
+        3 => "ثلاثون",
+        4 => "أربعون",
+        5 => "خمسون",
+        6 => "ستون",
+        7 => "سبعون",
+        8 => "ثمانون",
+        9 => "تسعون"
+    ];
 
-    if (floor($number) != $number) {
-        $integer = floor($number);
-        $decimal = explode(".", number_format($number, 2, '.', ''))[1];
-        return $this-> terbilangArab($integer) . " فاصلة " . implode(' ', array_map(function ($digit) use ($angka) {
-            return $angka[$digit];
-        }, str_split($decimal)));
+    if (!is_numeric($number) || $number < 1 || $number > 100) {
+        return "Diluar jangkauan";
     }
 
-    if ($number < 12) {
-        return $angka[$number];
+    if ($number == 100) {
+        return "مائة";
+    } elseif ($number < 10) {
+        return $satuan[$number];
     } elseif ($number < 20) {
-        return $angka[$number - 10] . " عشر";
-    } elseif ($number < 100) {
-        return $angka[intval($number / 10)] . "ون" . " و" . $angka[$number % 10];
-    } elseif ($number < 200) {
-        return "مائة و" . $this-> terbilangArab($number - 100);
-    } elseif ($number < 1000) {
-        return $angka[intval($number / 100)] . " مائة " . $this-> terbilangArab($number % 100);
-    } elseif ($number < 2000) {
-        return "ألف و" . $this-> terbilangArab($number - 1000);
-    } elseif ($number < 1000000) {
-        return $this-> terbilangArab(intval($number / 1000)) . " ألف " . $this-> terbilangArab($number % 1000);
+        return $belasan[$number];
     } else {
-        return $number;
+        $puluh = intval($number / 10);
+        $sisa = $number % 10;
+
+        if ($sisa == 0) {
+            return $puluhan[$puluh];
+        } else {
+            return $satuan[$sisa] . " و" . $puluhan[$puluh];
+        }
     }
 }
+
+public function terbilangArab100to2000($number)
+{
+    $ratusan = [
+        100 => "مائة", 200 => "مائتان", 300 => "ثلاثمائة", 400 => "أربعمائة",
+        500 => "خمسمائة", 600 => "ستمائة", 700 => "سبعمائة", 800 => "ثمانمائة", 900 => "تسعمائة"
+    ];
+
+    if ($number < 100 || $number > 2000) {
+        return "Diluar batas (100–2000)";
+    }
+
+    if ($number == 1000) return "ألف";
+    if ($number == 2000) return "ألفان";
+
+    if ($number < 1000) {
+        $ratus = intval($number / 100) * 100;
+        $sisa = $number % 100;
+
+        $hasil = $ratusan[$ratus];
+
+        if ($sisa > 0) {
+            $hasil .= " و" . $this->terbilangArab($sisa);
+        }
+
+        return $hasil;
+    }
+
+    // Untuk 1001–1999
+    if ($number < 2000) {
+        $sisa = $number - 1000;
+        $hasil = "ألف";
+
+        if ($sisa > 0) {
+            if ($sisa < 100) {
+                $hasil .= " و" . $this->terbilangArab($sisa);
+            } else {
+                $hasil .= " و" . $this->terbilangArab($sisa);
+            }
+        }
+
+        return $hasil;
+    }
+
+    return $number;
+}
+
+
 
 
 public function pengesahan(Santri $santri, $semester)
@@ -261,7 +336,7 @@ public function pengesahan(Santri $santri, $semester)
     
     
     // Kirim ke view
-    return view('pengesahan', compact(
+    return view('cetak.pengesahan', compact(
         'semesterLabel',
         'semester',
         'tahunAjaranLabel',
@@ -269,9 +344,20 @@ public function pengesahan(Santri $santri, $semester)
         'namaSantri',
         'noInduk',
         'alamatDesa',
-        'waliKelas', 'kepalaMadrasah', 'pengasuh'
+        'waliKelas', 'kepalaMadrasah', 'pengasuh', 'santri', 'semester'
     ));
 }
+    public function cover(Santri $santri)
+    {
+        return view('cetak.cover', compact('santri'));
+    }
+
+    public function dataDiri(Santri $santri)
+    {
+        return view('cetak.datadiri', compact('santri'));
+    }
+
+    
 }
 
 

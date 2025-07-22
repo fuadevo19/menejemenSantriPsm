@@ -37,5 +37,11 @@
       <div class="text-[10pt] mt-2">Nomor Induk: {{ $santri->no_induk }}</div>
     </div>
   </div>
+  <button 
+    onclick="window.print()" 
+    class="fixed top-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow print:hidden"
+    >
+    🖨️ Print A4
+  </button>
 </body>
 </html>

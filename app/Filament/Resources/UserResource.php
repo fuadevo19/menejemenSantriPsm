@@ -13,8 +13,11 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\UserResource\Pages;
+use Filament\Tables\Actions\ForceDeleteAction;
 
 class UserResource extends Resource
 {
@@ -37,7 +40,10 @@ class UserResource extends Resource
             TextInput::make('name')
                 ->label('Nama')
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                 ->afterStateUpdated(fn ($set,$state)=>
+                    $set('name', ucwords(strtolower($state)))
+                ),
 
             TextInput::make('username')
                 ->label('Username')
@@ -63,19 +69,32 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
-                TextColumn::make('name')->label('Nama')->searchable(),
-                TextColumn::make('username')->label('Username')->searchable(),
-                TextColumn::make('role')->label('Role')->badge(),
-                TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y'),
-            ])
-            ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make(),
-            ]);
+          return $table
+        ->columns([
+            TextColumn::make('name')->label('Nama')->searchable(),
+            TextColumn::make('username')->label('Username')->searchable(),
+            TextColumn::make('role')->label('Role')->badge(),
+            TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y'),
+        ])
+        ->filters([
+            TrashedFilter::make(), // 🔍 Filter tampilkan trashed (terhapus) / semua / aktif
+        ])
+        ->actions([
+            EditAction::make(),
+            DeleteAction::make()
+                ->visible(fn ($record) => $record->id !== Auth::id()),
+
+            // 🔁 Restore action jika record terhapus
+            RestoreAction::make()
+                ->visible(fn ($record) => $record->trashed()),
+
+            // ❌ Force Delete (hapus permanen)
+            ForceDeleteAction::make()
+                ->visible(fn ($record) => $record->trashed()),
+        ])
+        ->bulkActions([
+            DeleteBulkAction::make()->deselectRecordsAfterCompletion(),
+        ]);
     }
 
     public static function getPages(): array

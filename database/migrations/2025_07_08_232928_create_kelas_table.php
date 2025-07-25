@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('nama_kelas');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // siapa yang buat
             $table->string('wali_kelas');
+            $table->string('nip_wali_kelas')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

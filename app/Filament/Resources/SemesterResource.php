@@ -44,7 +44,10 @@ class SemesterResource extends Resource
             TextInput::make('nama_semester')
                 ->label('Nama Semester')
                 ->placeholder('Contoh: Semester 1')
-                ->required(),
+                ->required()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('nama_semester', ucwords(strtolower($state)))
+                ),
 
             Select::make('semester')
                 ->label('Jenis Semester')

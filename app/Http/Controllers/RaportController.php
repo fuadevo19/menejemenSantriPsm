@@ -328,11 +328,13 @@ public function pengesahan(Santri $santri, $semester)
 
     // Ambil wali kelas dari relasi kelas
     $waliKelas = $kelas?->wali_kelas ?? '-';
-    
+    $NIPwaliKelas = $kelas?->nip_wali_kelas ?? '-';
     // Ambil kepala madrasah dan pengasuh
     $tahunAjaran = $nilai?->tahunAjaran;
     $kepalaMadrasah = $tahunAjaran?->kepala_madrasah ?? '-';
+    $NIPkepalaMadrasah = $tahunAjaran?->nip_kepala_madrasah ?? '-';
     $pengasuh = $tahunAjaran?->pengasuh ?? '-';
+    $NIPpengasuh = $tahunAjaran?->nip_pengasuh ?? '-';
     
     
     // Kirim ke view
@@ -344,7 +346,8 @@ public function pengesahan(Santri $santri, $semester)
         'namaSantri',
         'noInduk',
         'alamatDesa',
-        'waliKelas', 'kepalaMadrasah', 'pengasuh', 'santri', 'semester'
+        'waliKelas', 'kepalaMadrasah', 'pengasuh', 'santri', 'semester',
+        'NIPwaliKelas', 'NIPkepalaMadrasah', 'NIPpengasuh'
     ));
 }
     public function cover(Santri $santri)
@@ -354,7 +357,18 @@ public function pengesahan(Santri $santri, $semester)
 
     public function dataDiri(Santri $santri)
     {
-        return view('cetak.datadiri', compact('santri'));
+        $tahunAjaranTerbaru = TahunAjaran::latest('id')->first();
+
+        
+            $kepalaMadrasah = $tahunAjaranTerbaru?->kepala_madrasah ?? '-';
+            $nipKepalaMadrasah = $tahunAjaranTerbaru?->nip_kepala_madrasah ?? '-';
+
+        
+        
+
+        return view('cetak.datadiri', compact('santri', 'kepalaMadrasah', 'nipKepalaMadrasah'
+    ));
+        
     }
 
     

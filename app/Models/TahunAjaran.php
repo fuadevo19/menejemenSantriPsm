@@ -15,7 +15,9 @@ class TahunAjaran extends Model
         'tahun_mulai',
         'tahun_selesai',
         'kepala_madrasah',
+        'nip_kepala_madrasah',
         'pengasuh',
+        'nip_pengasuh'
     ];
 
     public function semesters()

@@ -40,7 +40,7 @@ class TahunAjaranResource extends Resource
         return $form->schema([
             TextInput::make('label')
                 ->label('Label Tahun Ajaran')
-                ->placeholder('contoh: 2024/2025')
+                ->placeholder('Ex: 2024/2025')
                 ->required(),
 
             TextInput::make('tahun_mulai')
@@ -60,17 +60,25 @@ class TahunAjaranResource extends Resource
             TextInput::make('kepala_madrasah')
                 ->label('Kepala Madrasah')
                 ->required()
-                ->afterStateUpdated(fn ($set,$state)=>
-                    $set('kepala_madrasah', ucwords(strtolower($state)))
-                ),
+                ->placeholder('Ex: SYAMSUL HADI, S.Pd.'),
 
-            TextInput::make('pengasuh')
+           TextInput::make('pengasuh')
                 ->label('Pengasuh')
                 ->required()
-                ->afterStateUpdated(fn ($set,$state)=>
-                    $set('pengasuh', ucwords(strtolower($state)))
-                ),
+                ->placeholder('Ex: NAJMUDIN, S.Kom.'),
 
+            TextInput::make('nip_kepala_madrasah')
+                ->label('NIP Kepala Madrasah')
+                ->numeric()
+                ->maxLength(20)
+                ->nullable(),
+
+            TextInput::make('nip_pengasuh')
+                ->label('NIP Pengasuh')
+                ->numeric()
+                ->maxLength(20)
+                ->nullable(),
+            
             Hidden::make('user_id')->default(fn () => Auth::id()),
         ]);
     }
@@ -81,6 +89,11 @@ class TahunAjaranResource extends Resource
                 TextColumn::make('label')->label('Label')->searchable(),
                 TextColumn::make('tahun_mulai')->label('Mulai'),
                 TextColumn::make('tahun_selesai')->label('Selesai'),
+                TextColumn::make('kepala_madrasah')->label('Kepala Madrasah'),
+                TextColumn::make('nip_kepala_madrasah')->label('NIP Kepala Madrasah'),
+                TextColumn::make('pengasuh')->label('Pengasuh'),
+                TextColumn::make('nip_pengasuh')->label('NIP Pengasuh'),
+                
                 TextColumn::make('user.name')
                 ->label('Diinput oleh')
                 ->visible(fn () => Auth::user()?->role === 'super_admin'),

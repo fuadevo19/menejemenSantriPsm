@@ -148,7 +148,7 @@
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
                 <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">60</td>
-                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
+                <td dir="rtl" class="border border-black py-0.5 text-right pr-1 text-[8pt] max-w-[120px] break-words leading-tight">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
                     {{ $convertToArabic($nilai->nilai) ?? '-'}}
                 </td>
@@ -190,7 +190,7 @@
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
                 <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang }}</td>
                 <td class="border border-black py-0.5 font-bold">60</td>
-                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
+                <td dir="rtl" class="border border-black py-0.5 text-right pr-1 text-[8pt] max-w-[120px] break-words leading-tight">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
                     {{ $convertToArabic($nilai->nilai) }}
                 </td>
@@ -234,7 +234,7 @@
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
                 <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang }}</td>
                 <td class="border border-black py-0.5 font-bold">60</td>
-                <td dir="rtl" class="border border-black text-right py-0.5 pr-1">{{$nilai->terbilang_arab ?? '-'}}</td>
+                <td dir="rtl" class="border border-black py-0.5 text-right pr-1 text-[8pt] max-w-[120px] break-words leading-tight">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
                     {{ $convertToArabic($nilai->nilai) }}
                 </td>

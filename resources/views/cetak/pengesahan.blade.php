@@ -159,21 +159,21 @@
             <div>
                 <div class="font-semibold">Guru Wali Kelas</div>
                 <div class="mt-12 font-bold underline">{{$waliKelas}}</div>
-                <div class="text-xs mt-1">NIP. -</div>
+                <div class="text-xs mt-1">NIP. {{$NIPwaliKelas}}</div>
             </div>
 
             <!-- Kolom 3: Kepala Madrasah -->
             <div>
                 <div class="font-semibold">Kepala Madrasah</div>
                 <div class="mt-12 font-bold underline">{{$kepalaMadrasah}}</div>
-                <div class="text-xs mt-1">NIP. -</div>
+                <div class="text-xs mt-1">NIP. {{$NIPkepalaMadrasah}}</div>
             </div>
         </div>
         <div class="absolute text-center w-full mt-[18.5rem] text-[10pt] -ml-5">
         <div>
             <div class="font-semibold">Mengetahui, <br><span>Pengasuh</span></div>
             <div class="mt-12 font-bold underline">{{$pengasuh}}</div>
-            <div class="text-xs mt-1">NIP. -</div>
+            <div class="text-xs mt-1">NIP. {{$NIPpengasuh}}</div>
         </div>
         </div>
              

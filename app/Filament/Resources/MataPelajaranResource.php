@@ -47,12 +47,11 @@ class MataPelajaranResource extends Resource
                 ->extraAttributes([
                     'dir'  => 'rtl',      // tulis dari kanan ke kiri
                     'lang' => 'ar',       // beri tahu browser ini bahasa Arab
-                    'inputmode' => 'verbatim', // keyboard huruf penuh, bukan angka
                 ])
-                ->placeholder('فقه المبادئ'),
+                ->placeholder('فقه المبادئ :Ex'),
 
             Select::make('kategori')
-                ->label('Kategori')
+                ->label('Kategori Pelajaran')
                 ->options([
                     'Tertulis' => 'Tertulis',
                     'Hafalan dan Membaca' => 'Hafalan dan Membaca',

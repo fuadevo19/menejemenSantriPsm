@@ -15,7 +15,9 @@ return new class extends Migration {
             $table->integer('tahun_mulai');
             $table->integer('tahun_selesai');
             $table->string('kepala_madrasah');
+            $table->string('nip_kepala_madrasah')->nullable();
             $table->string('pengasuh');
+            $table->string('nip_pengasuh')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

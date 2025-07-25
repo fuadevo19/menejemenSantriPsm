@@ -24,11 +24,11 @@ return new class extends Migration {
             $table->string('sekolah_asal')->nullable();
             $table->string('diterima_sebagai')->nullable();
             $table->date('tanggal_diterima')->nullable();
-
+            $table->string('rombel')->nullable();
             $table->string('angkatan');
             $table->foreignId('kelas_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-
+            
             $table->timestamps();
             $table->softDeletes();
         });

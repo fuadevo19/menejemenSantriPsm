@@ -40,14 +40,19 @@ class KelasResource extends Resource
                 ->afterStateUpdated(fn ($set,$state)=>
                     $set('nama_kelas', ucwords(strtolower($state)))
                 ),
+                
 
             TextInput::make('wali_kelas')
                 ->label('Wali Kelas')
                 ->required()
-                ->afterStateUpdated(fn ($set,$state)=>
-                    $set('wali_kelas', ucwords(strtolower($state)))
-                ),
+                ->placeholder('Ex: SITI RAHMAWATI, S.Pd.'),
 
+            TextInput::make('nip_wali_kelas')
+                ->label('NIP Wali Kelas')
+                ->numeric() // hanya izinkan angka
+                ->maxLength(20)
+                ->nullable(),
+                
             Hidden::make('user_id')->default(fn () => Auth::id()),
         ]);
     }
@@ -60,6 +65,7 @@ class KelasResource extends Resource
                 TextColumn::make('user.name')->label('Di‑input oleh'),
                 TextColumn::make('nama_kelas')->label('Nama Kelas')->searchable(),
                 TextColumn::make('wali_kelas')->label('Wali kelas'),
+                TextColumn::make('nip_wali_kelas')->label('NIP Wali Kelas')
             ])
             ->filters([
                 TrashedFilter::make(),

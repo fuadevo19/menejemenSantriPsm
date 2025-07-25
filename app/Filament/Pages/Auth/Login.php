@@ -2,10 +2,12 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Auth\Login as BaseLogin;
+use Illuminate\Validation\ValidationException;
 
 class Login extends BaseLogin
 {
@@ -54,4 +56,23 @@ class Login extends BaseLogin
             'data.username' => 'Username atau password salah.',
         ]);
     }
+
+    protected function getRememberFormComponent(): Component
+{
+    return Checkbox::make('remember')
+        ->label('Ingat saya')
+        ->extraInputAttributes(['tabindex' => 3]);
+}
+
+public function getTanggalDiterimaFormattedAttribute()
+{
+    if (! $this->tanggal_diterima) {
+        return null;
+    }
+
+    return Carbon::parse($this->tanggal_diterima)
+        ->locale('id')
+        ->translatedFormat('j F Y'); // contoh: 1 Juli 2025
+}
+                                           
 }

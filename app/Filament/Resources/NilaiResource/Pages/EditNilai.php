@@ -16,7 +16,7 @@ class EditNilai extends EditRecord
         return [
             Action::make('back')
                 ->label('Kembali ke Tabel')
-                ->url(\App\Filament\Resources\SantriResource::getUrl('index'))
+                ->url(\App\Filament\Resources\NilaiResource::getUrl('index'))
                 ->icon('heroicon-m-arrow-uturn-left')
                 ->color('gray'),
             Actions\DeleteAction::make(),

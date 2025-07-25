@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Santri extends Model
 {
@@ -69,4 +70,15 @@ class Santri extends Model
     {
         return $this->hasMany(Nilai::class);
     }
+
+    public function getTanggalDiterimaFormattedAttribute()
+{
+    if (! $this->tanggal_diterima) {
+        return null;
+    }
+
+    return Carbon::parse($this->tanggal_diterima)
+        ->locale('id')
+        ->translatedFormat('j F Y'); // contoh: 1 Juli 2025
+}
 }

@@ -16,7 +16,7 @@ class EditTahunAjaran extends EditRecord
         return [
             Action::make('back')
                 ->label('Kembali ke Tabel')
-                ->url(\App\Filament\Resources\SantriResource::getUrl('index'))
+                ->url(\App\Filament\Resources\TahunAjaranResource::getUrl('index'))
                 ->icon('heroicon-m-arrow-uturn-left')
                 ->color('gray'),
             Actions\DeleteAction::make(),

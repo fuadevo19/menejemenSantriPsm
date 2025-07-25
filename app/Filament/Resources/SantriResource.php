@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use App\Models\Santri;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -19,8 +20,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Actions\RestoreAction;
 
+use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ForceDeleteAction;
@@ -47,9 +48,8 @@ class SantriResource extends Resource
             TextInput::make('nama_santri')
                 ->label('Nama Santri')
                 ->required()
-                ->afterStateUpdated(fn ($set,$state)=>
-                    $set('nama_santri', ucwords(strtolower($state)))
-                ),
+                ->dehydrateStateUsing(fn ($state) => strtoupper($state))
+                ->unique(ignoreRecord: true),
 
             TextInput::make('no_induk')
                 ->label('Nomor Induk')
@@ -76,7 +76,10 @@ class SantriResource extends Resource
 
             TextInput::make('tempat_lahir')
                 ->label('Tempat Lahir')
-                ->nullable(),
+                ->nullable()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('tempat_lahir', ucwords(strtolower($state)))
+                    ),
 
             DatePicker::make('tanggal_lahir')
                 ->label('Tanggal Lahir')
@@ -84,12 +87,30 @@ class SantriResource extends Resource
 
             TextInput::make('agama')
                 ->label('Agama')
+                ->nullable()
+                ->afterStateUpdated(fn ($set,$state)=>
+                    $set('agama', ucwords(strtolower($state)))
+                    ),
+            
+            TextInput::make('anak_ke')
+                ->label('Anak Ke')
+                ->numeric()
+                ->minValue(1)
                 ->nullable(),
 
             TextInput::make('sekolah_asal')
                 ->label('Sekolah Asal')
+                ->nullable()
+                ->placeholder('Ex: SMA Taruna Utama'),
+            
+            TextInput::make('diterima_sebagai')
+                ->label('Diterima Sebagai')
                 ->nullable(),
 
+            DatePicker::make('tanggal_diterima')
+                ->label('Tanggal Diterima')
+                ->nullable(),
+                        
             /* ---------- Angkatan & Kelas ---------- */
             TextInput::make('angkatan')
                 ->label('Angkatan')
@@ -99,6 +120,13 @@ class SantriResource extends Resource
                 ->label('Kelas')
                 ->relationship('kelas','nama_kelas')
                 ->required(),
+
+            TextInput::make('rombel')
+                ->label('Rombel')
+                ->nullable()
+                ->afterStateUpdated(fn ($set,$state)=>
+                        $set('rombel', ucwords(strtolower($state)))
+                        ),
 
             Hidden::make('user_id')
                 ->default(fn () => Auth::id())
@@ -190,6 +218,8 @@ class SantriResource extends Resource
                 TextColumn::make('nama_santri')->label('Nama')->searchable(),
                 TextColumn::make('kelas.nama_kelas')->label('Kelas'),
                 TextColumn::make('angkatan')->label('Angkatan'),
+                TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')
+                ->formatStateUsing(fn ($state) => Carbon::parse($state)->locale('id')->translatedFormat('d F Y')),
                 TextColumn::make('ayah.nama')->label('Nama Ayah')->searchable()->toggleable(),
                 TextColumn::make('ibu.nama')->label('Nama Ibu')->searchable()->toggleable(),
                 TextColumn::make('alamat.desa')->label('Desa')->toggleable(),

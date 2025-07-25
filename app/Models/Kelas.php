@@ -14,6 +14,7 @@ class Kelas extends Model
         'nama_kelas',
         'user_id',
         'wali_kelas',
+        'nip_wali_kelas',
     ];
 
     public function user()

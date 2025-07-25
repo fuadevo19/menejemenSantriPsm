@@ -39,7 +39,7 @@
             <tr><td class="pl-4">9.</td><td>Anak Ke‑</td><td>:</td><td>{{ $santri->anak_ke ?? '-' }}</td></tr>
             <tr><td class="pl-2">10.</td><td>Sekolah Asal</td><td>:</td><td>{{ $santri->sekolah_asal ?? '-' }}</td></tr>
             <tr><td class="pl-2">11.</td><td>Diterima Sebagai</td><td>:</td><td>{{ $santri->diterima_sebagai ?? '-' }}</td></tr>
-            <tr><td class="pl-2">12.</td><td>Diterima Tanggal</td><td>:</td><td>{{ $santri->tanggal_diterima ?? '-' }}</td></tr>
+            <tr><td class="pl-2">12.</td><td>Diterima Tanggal</td><td>:</td><td>{{ $santri->tanggal_diterima_formatted ?? '-' }}</td></tr>
             <tr><td class="pl-2">13.</td><td>Kelas</td><td>:</td><td>{{ $santri->kelas->nama_kelas ?? '-' }}</td></tr>
             <tr><td class="pl-2">14.</td><td>Rombel</td><td>:</td><td>{{ $santri->rombel ?? '-' }}</td></tr>
             <tr><td class="pl-2">15.</td><td>Alamat</td><td>:</td></tr>
@@ -71,7 +71,7 @@
           <tr><td class="pl-2">18.</td><td>NIK</td><td>:</td><td>{{ $santri->ayah->nik ?? '-' }}</td></tr>
           <tr><td class="pl-2">19.</td><td>Pendidikan</td><td>:</td><td>{{ $santri->ayah->pendidikan ?? '-' }}</td></tr>
           <tr><td class="pl-2">20.</td><td>Pekerjaan</td><td>:</td><td>{{ $santri->ayah->pekerjaan ?? '-' }}</td></tr>
-          <tr><td class="pl-2">21.</td><td>Penghasilan</td><td>:</td><td>{{ $santri->ayah->penghasilan ?? '-' }}</td></tr>
+          <tr><td class="pl-2">21.</td><td>Penghasilan</td><td>:</td><td>{{ $santri->ayah->penghasilan ? number_format($santri->ayah->penghasilan, 0, ',', '.') : '-' }}</td></tr>
         </tbody></table>
       </div>
 
@@ -84,7 +84,7 @@
           <tr><td class="pl-1.5">24.</td><td>NIK</td><td>:</td><td>{{ $santri->ibu->nik ?? '-' }}</td></tr>
           <tr><td class="pl-1.5">25.</td><td>Pendidikan</td><td>:</td><td>{{ $santri->ibu->pendidikan ?? '-' }}</td></tr>
           <tr><td class="pl-1.5">26.</td><td>Pekerjaan</td><td>:</td><td>{{ $santri->ibu->pekerjaan ?? '-' }}</td></tr>
-          <tr><td class="pl-1.5">27.</td><td>Penghasilan</td><td>:</td><td>{{ $santri->ibu->penghasilan ?? '-' }}</td></tr>
+          <tr><td class="pl-1.5">27.</td><td>Penghasilan</td><td>:</td><td>{{ $santri->ibu->penghasilan ? number_format($santri->ibu->penghasilan, 0, ',', '.') : '-' }}</td></tr>
         </tbody></table>
       </div>
 
@@ -110,16 +110,18 @@
         <div class="border border-gray-400 w-[90px] h-[120px] flex items-center justify-center text-[8pt] leading-tight text-center ml-6">Photo<br/>3 × 4</div>
         <div class="text-center text-[10pt] ml-10">
           <span class="ml-11" >Way Kanan, <input 
-      type="text" 
-      placeholder="Edit: Tanggal" 
-      class="w-auto border-gray-400 outline-none" 
-      oninput="resizeInput(this)" 
-      size="1"
-    ><br/>
-  </span></span>
+              type="text" 
+              placeholder="Edit: Tanggal" 
+              class="w-auto border-gray-400 outline-none" 
+              oninput="resizeInput(this)" 
+              size="1"
+            ><br/>
+          </span>
           Kepala Madrasah<br/><br/><br/>
-          <span class="font-semibold underline">{{ $tahunAjaran->kepala_madrasah ?? '-' }}</span><br/>
-          NIP.
+          <div class="leading-tight space-y-0.5">
+              <span class="font-bold underline">{{ $kepalaMadrasah ?? '-' }}</span><br/>
+              <span class="text-[9pt]">NIP. {{ $nipKepalaMadrasah ?? '-' }}</span>
+          </div>
         </div>
       </div>
     </div>

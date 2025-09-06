@@ -13,6 +13,7 @@ class Semester extends Model
     protected $fillable = [
         'nama_semester',
         'semester',
+        'user_id'
     ];
 
     public function tahunAjaran()

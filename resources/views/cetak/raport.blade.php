@@ -24,50 +24,53 @@
     <div class="w-full px-4 py-2 text-[9pt] font-sans">
 
   <!-- Dua kolom info -->
-  <div class="grid grid-cols-2 gap-77 mx-1.5">
-    <!-- Kolom Kiri -->
-    <div class="space-y-[2px]">
-      <div class="flex">
-        <span class="min-w-[80px]">Nama Santri</span>
-        <span class="w-2 text-center">:</span>
-        <span class="font-semibold flex-1">{{ $santri->nama_santri ?? '-' }}</span>
-      </div>
-      <div class="flex">
-        <span class="min-w-[80px]">No. Induk</span>
-        <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $santri->no_induk ?? '-' }}</span>
-      </div>
-      <div class="flex">
-        <span class="min-w-[80px]">Alamat</span>
-        <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $santri->alamat->desa ?? '-' }}</span>
-      </div>
+<div class="flex justify-between mx-1.5  p-2">
+  <!-- Kolom Kiri -->
+  <div class="space-y-[2px]">
+    <div class="flex ">
+      <span class="min-w-[80px]">Nama Santri</span>
+      <span class="w-2 text-center">:</span>
+      <span class="font-semibold flex-1">{{ $santri->nama_santri ?? '-' }}</span>
     </div>
+    <div class="flex">
+      <span class="min-w-[80px]">No. Induk</span>
+      <span class="w-2 text-center">:</span>
+      <span class="flex-1">{{ $santri->no_induk ?? '-' }}</span>
+    </div>
+    <div class="flex">
+      <span class="min-w-[80px]">Alamat</span>
+      <span class="w-2 text-center">:</span>
+      <span class="flex-1">{{ $santri->alamat->desa ?? '-' }}</span>
+    </div>
+  </div>
 
-    <!-- Kolom Kanan -->
-    <div class="space-y-[2px]">
-      <div class="flex">
-        <span class="min-w-[90px]">Kelas</span>
-        <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $kelas->nama_kelas ?? '-' }}</span>
-      </div>
-      <div class="flex">
-        <span class="min-w-[90px]">Semester</span>
-        <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $semester->nama_semester ?? '-' }} ({{$semesterLabel ?? '-'}})</span>
-      </div>
-      <div class="flex">
-        <span class="min-w-[90px]">Tahun Pelajaran</span>
-        <span class="w-2 text-center">:</span>
-        <span class="flex-1">{{ $tahunAjaranLabel ?? '-'}}</span>
-      </div>
+  <!-- Kolom Kanan -->
+  <div class="space-y-[2px]">
+    <div class="flex">
+      <span class="min-w-[90px]">Kelas</span>
+      <span class="w-2 text-center">:</span>
+      <span class="flex-1">{{ $kelas->nama_kelas ?? '-' }}</span>
+    </div>
+    <div class="flex">
+      <span class="min-w-[90px]">Semester</span>
+      <span class="w-2 text-center">:</span>
+      <span class="flex-1">
+        {{ $semester->nama_semester ?? '-' }} ({{ $semesterLabel ?? '-' }})
+      </span>
+    </div>
+    <div class="flex">
+      <span class="min-w-[90px]">Tahun Pelajaran</span>
+      <span class="w-2 text-center">:</span>
+      <span class="flex-1">{{ $tahunAjaranLabel ?? '-'}}</span>
     </div>
   </div>
 </div>
 
+</div>
+
 
   <div class="mx-5">
-    <table class="w-full text-[9pt] text-center ">
+    <table class="w-full text-[9pt] text-center table-fixed">
         {{-- <colgroup>
             <col class="w-4" />        <!-- No -->
             <col class="w-72" /> <!-- Mata Pelajaran -->
@@ -146,7 +149,39 @@
                 <td class="border border-black py-0.5">{{ $index + 1 ?? '-'}}</td>
                 <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
-                <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang ?? '-'}}</td>
+                <td class="border border-black py-0.5 text-left px-1 w-[120px] align-middle">
+                  <div class="scale-text-wrapper w-full overflow-hidden">
+                      <span class="scale-text block whitespace-nowrap leading-tight">
+                          {{ $nilai->terbilang ?? '-' }}
+                      </span>
+                  </div>
+
+                  <style>
+                      .scale-text-wrapper {
+                          display: flex;
+                          align-items: center;
+                          height: 100%;
+                      }
+                      .scale-text {
+                          display: inline-block;
+                          transform-origin: left center;
+                          font-size: 8pt;
+                      }
+                  </style>
+
+                  <script>
+                      document.addEventListener('DOMContentLoaded', function () {
+                          document.querySelectorAll('.scale-text').forEach(el => {
+                              const parentWidth = el.parentElement.offsetWidth;
+                              const contentWidth = el.scrollWidth;
+                              if (contentWidth > parentWidth) {
+                                  const scale = parentWidth / contentWidth;
+                                  el.style.transform = `scaleX(${scale})`;
+                              }
+                          });
+                      });
+                  </script>
+                </td>
                 <td class="border border-black py-0.5 font-bold">60</td>
                 <td dir="rtl" class="border border-black py-0.5 text-right pr-1 text-[8pt] max-w-[120px] break-words leading-tight">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
@@ -188,7 +223,39 @@
                 <td class="border border-black py-0.5">{{ $index + 1 }}</td>
                 <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
-                <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 text-left px-1 w-[120px] align-middle">
+                  <div class="scale-text-wrapper w-full overflow-hidden">
+                      <span class="scale-text block whitespace-nowrap leading-tight">
+                          {{ $nilai->terbilang ?? '-' }}
+                      </span>
+                  </div>
+
+                  <style>
+                      .scale-text-wrapper {
+                          display: flex;
+                          align-items: center;
+                          height: 100%;
+                      }
+                      .scale-text {
+                          display: inline-block;
+                          transform-origin: left center;
+                          font-size: 8pt;
+                      }
+                  </style>
+
+                  <script>
+                      document.addEventListener('DOMContentLoaded', function () {
+                          document.querySelectorAll('.scale-text').forEach(el => {
+                              const parentWidth = el.parentElement.offsetWidth;
+                              const contentWidth = el.scrollWidth;
+                              if (contentWidth > parentWidth) {
+                                  const scale = parentWidth / contentWidth;
+                                  el.style.transform = `scaleX(${scale})`;
+                              }
+                          });
+                      });
+                  </script>
+                </td>
                 <td class="border border-black py-0.5 font-bold">60</td>
                 <td dir="rtl" class="border border-black py-0.5 text-right pr-1 text-[8pt] max-w-[120px] break-words leading-tight">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
@@ -232,7 +299,39 @@
                 <td class="border border-black py-0.5">{{ $index + 1 }}</td>
                 <td class="border border-black text-left py-0.5 pl-1">{{ $nilai->mataPelajaran->nama_pelajaran ?? '-' }}</td>
                 <td class="border border-black py-0.5 font-bold">{{$nilai->nilai ?? '-'}}</td>
-                <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">{{ $nilai->terbilang }}</td>
+                <td class="border border-black py-0.5 text-left px-1 w-[120px] align-middle">
+                  <div class="scale-text-wrapper w-full overflow-hidden">
+                      <span class="scale-text block whitespace-nowrap leading-tight">
+                          {{ $nilai->terbilang ?? '-' }}
+                      </span>
+                  </div>
+
+                  <style>
+                      .scale-text-wrapper {
+                          display: flex;
+                          align-items: center;
+                          height: 100%;
+                      }
+                      .scale-text {
+                          display: inline-block;
+                          transform-origin: left center;
+                          font-size: 8pt;
+                      }
+                  </style>
+
+                  <script>
+                      document.addEventListener('DOMContentLoaded', function () {
+                          document.querySelectorAll('.scale-text').forEach(el => {
+                              const parentWidth = el.parentElement.offsetWidth;
+                              const contentWidth = el.scrollWidth;
+                              if (contentWidth > parentWidth) {
+                                  const scale = parentWidth / contentWidth;
+                                  el.style.transform = `scaleX(${scale})`;
+                              }
+                          });
+                      });
+                  </script>
+                </td>
                 <td class="border border-black py-0.5 font-bold">60</td>
                 <td dir="rtl" class="border border-black py-0.5 text-right pr-1 text-[8pt] max-w-[120px] break-words leading-tight">{{$nilai->terbilang_arab ?? '-'}}</td>
                 <td class="border border-black py-0.5 font-bold">
@@ -263,9 +362,39 @@
           <tr class="border-b border-black">
             <td colspan="2" class="text-left px-1 border border-black py-0.5 font-bold">JUMLAH</td>
             <td class="py-0.5 font-bold">{{$totalNilai}}</td>
-            <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">
-              {{ $terbilang }}
-            </td>
+            <td class="border border-black py-0.5 text-left px-1 w-[120px] align-middle">
+              <div class="scale-text-wrapper w-full overflow-hidden">
+                  <span class="scale-text block whitespace-nowrap leading-tight">
+                      {{ $terbilang ?? '-' }}
+                  </span>
+              </div>
+
+              <style>
+                  .scale-text-wrapper {
+                      display: flex;
+                      align-items: center;
+                      height: 100%;
+                  }
+                  .scale-text {
+                      display: inline-block;
+                      transform-origin: left center;
+                      font-size: 8pt;
+                  }
+              </style>
+
+              <script>
+                  document.addEventListener('DOMContentLoaded', function () {
+                      document.querySelectorAll('.scale-text').forEach(el => {
+                          const parentWidth = el.parentElement.offsetWidth;
+                          const contentWidth = el.scrollWidth;
+                          if (contentWidth > parentWidth) {
+                              const scale = parentWidth / contentWidth;
+                              el.style.transform = `scaleX(${scale})`;
+                          }
+                      });
+                  });
+              </script>
+          </td>
 
             <!-- sel kosong untuk rowspan -->
             <td rowspan="3" class="border border-black border-b-0 py-0.5"></td>
@@ -282,9 +411,39 @@
           <tr class="border-b border-black">
             <td colspan="2" class="text-left px-1 border border-black py-0.5 font-bold">RATA‑RATA</td>
             <td class="py-0.5 font-bold">{{$rataRata}}</td>
-            <td class="border border-black py-0.5 text-left pl-1 text-[8pt] max-w-[120px] break-words leading-tight">
-              {{ $rataRataIndo }}
-            </td>
+            <td class="border border-black py-0.5 text-left px-1 w-[120px] align-middle">
+              <div class="scale-text-wrapper w-full overflow-hidden">
+                  <span class="scale-text block whitespace-nowrap leading-tight">
+                      {{ $rataRataIndo ?? '-' }}
+                  </span>
+              </div>
+
+              <style>
+                  .scale-text-wrapper {
+                      display: flex;
+                      align-items: center;
+                      height: 100%;
+                  }
+                  .scale-text {
+                      display: inline-block;
+                      transform-origin: left center;
+                      font-size: 8pt;
+                  }
+              </style>
+
+              <script>
+                  document.addEventListener('DOMContentLoaded', function () {
+                      document.querySelectorAll('.scale-text').forEach(el => {
+                          const parentWidth = el.parentElement.offsetWidth;
+                          const contentWidth = el.scrollWidth;
+                          if (contentWidth > parentWidth) {
+                              const scale = parentWidth / contentWidth;
+                              el.style.transform = `scaleX(${scale})`;
+                          }
+                      });
+                  });
+              </script>
+          </td>
 
             <td dir="rtl" class="border border-black text-right py-0.5 pr-1 text-[8pt] max-w-[120px] break-words leading-tight">
                 {{ $rataRataArab }}

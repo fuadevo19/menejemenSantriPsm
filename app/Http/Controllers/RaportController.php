@@ -76,7 +76,12 @@ class RaportController extends Controller
     }
 
     // Konversi angka ke angka arab (fungsi bantu)
-    $convertToArabic = fn($number) => implode('', array_map(fn($d) => ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'][$d], str_split((string)$number)));
+    $convertToArabic = fn($number) => implode('', array_map(
+    fn($d) => ctype_digit($d) 
+        ? ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'][$d] 
+        : $d,
+    str_split((string)$number)
+    ));
 
     // Total nilai & rata-rata
     $totalNilai = $nilaiTertulis->sum('nilai') + $nilaiHafalanMembaca->sum('nilai') + $nilaiEkstrakurikuler->sum('nilai');

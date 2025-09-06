@@ -17,7 +17,8 @@ class TahunAjaran extends Model
         'kepala_madrasah',
         'nip_kepala_madrasah',
         'pengasuh',
-        'nip_pengasuh'
+        'nip_pengasuh',
+        'user_id'
     ];
 
     public function semesters()

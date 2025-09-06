@@ -48,8 +48,7 @@ class SantriResource extends Resource
             TextInput::make('nama_santri')
                 ->label('Nama Santri')
                 ->required()
-                ->dehydrateStateUsing(fn ($state) => strtoupper($state))
-                ->unique(ignoreRecord: true),
+                ->dehydrateStateUsing(fn ($state) => strtoupper($state)),
 
             TextInput::make('no_induk')
                 ->label('Nomor Induk')
@@ -214,7 +213,7 @@ class SantriResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('no_induk')->label('No Induk')->searchable(),
-                TextColumn::make('NISN/NIS')->label('NISN/NIS')->searchable(),
+                TextColumn::make('nisn')->label('NISN/NIS')->searchable(),
                 TextColumn::make('nama_santri')->label('Nama')->searchable(),
                 TextColumn::make('kelas.nama_kelas')->label('Kelas'),
                 TextColumn::make('angkatan')->label('Angkatan'),

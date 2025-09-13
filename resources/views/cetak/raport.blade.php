@@ -67,8 +67,6 @@
 </div>
 
 </div>
-
-
   <div class="mx-5">
     <table class="w-full text-[9pt] text-center table-fixed">
         {{-- <colgroup>

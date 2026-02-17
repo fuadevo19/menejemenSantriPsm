@@ -101,8 +101,11 @@ class AbsensiResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->withTrashed();
+        return parent::getEloquentQuery()
+            ->whereHas('santri') // hanya ambil yang santrinya tidak di-soft delete
+            ->with(['santri', 'sakit', 'izin', 'alpha', 'semester']);
     }
+
 
     public static function beforeCreate(array $data): array
     {

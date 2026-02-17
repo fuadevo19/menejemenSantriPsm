@@ -145,8 +145,11 @@ Select::make('mata_pelajaran_id')
     /* ---------- Query ---------- */
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->withTrashed();   // tampilkan juga data soft‑deleted
+        return parent::getEloquentQuery()
+            ->whereHas('santri') // hanya ambil yang santrinya tidak di-soft delete
+            ->with(['santri', 'kelas', 'mataPelajaran', 'semester', 'tahunAjaran']);
     }
+
 
     /* ---------- Auto‑set user_id ---------- */
     public static function beforeCreate(array $data): array

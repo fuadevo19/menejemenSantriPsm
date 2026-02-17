@@ -130,8 +130,11 @@ class KepribadianSantriResource extends Resource
 
    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->withTrashed(); // tampilkan semua data termasuk terhapus
+        return parent::getEloquentQuery()
+            ->whereHas('santri') // hanya ambil yang santrinya tidak di-soft delete
+            ->with(['santri', 'akhlaq', 'kerajinan', 'kedisiplinan', 'kerapihan', 'semester']);
     }
+
 
     public static function beforeCreate(array $data): array
     {

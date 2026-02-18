@@ -103,7 +103,7 @@ class AbsensiResource extends Resource
     {
         return parent::getEloquentQuery()
             ->whereHas('santri') // hanya ambil yang santrinya tidak di-soft delete
-            ->with(['santri', 'sakit', 'izin', 'alpha', 'semester']);
+            ->with(['santri', 'semester', 'user']);
     }
 
 

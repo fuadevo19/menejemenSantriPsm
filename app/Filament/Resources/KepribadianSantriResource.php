@@ -132,7 +132,7 @@ class KepribadianSantriResource extends Resource
     {
         return parent::getEloquentQuery()
             ->whereHas('santri') // hanya ambil yang santrinya tidak di-soft delete
-            ->with(['santri', 'akhlaq', 'kerajinan', 'kedisiplinan', 'kerapihan', 'semester']);
+            ->with(['santri', 'semester']);
     }
 
 

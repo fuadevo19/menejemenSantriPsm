@@ -171,7 +171,7 @@ Select::make('mata_pelajaran_id')
     {
         return [
             'index'  => Pages\ListNilais::route('/'),
-            'create' => Pages\CreateNilai::route('/create'),
+            'create' => Pages\BulkCreateNilai::route('/create'),
             'edit'   => Pages\EditNilai::route('/{record}/edit'),
         ];
     }

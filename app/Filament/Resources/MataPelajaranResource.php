@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Models\MataPelajaran;
-use App\Models\Kelas;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;

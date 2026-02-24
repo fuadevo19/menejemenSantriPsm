@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Models\KepribadianSantri;
-use App\Models\Santri;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;

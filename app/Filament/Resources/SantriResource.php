@@ -7,15 +7,15 @@ use App\Models\Santri;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Filters\Filter;
+
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Repeater;
+
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TextFilter;
+
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
@@ -28,7 +28,7 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\RestoreBulkAction;
 use App\Filament\Resources\SantriResource\Pages;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 
 class SantriResource extends Resource

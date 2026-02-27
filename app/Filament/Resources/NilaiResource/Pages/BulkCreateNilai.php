@@ -152,7 +152,7 @@ class BulkCreateNilai extends Page
                 ->action('save')
                 ->color('primary'),
 
-            Action::make('back')
+            Action::make('kembali')
                 ->url(NilaiResource::getUrl())
                 ->color('gray'),
         ];

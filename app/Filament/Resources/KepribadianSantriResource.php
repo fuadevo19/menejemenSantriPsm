@@ -2,24 +2,25 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\KepribadianSantriResource\Pages;
 use App\Models\KepribadianSantri;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\RestoreAction;
-use Filament\Tables\Actions\ForceDeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\RestoreBulkAction;
-use Filament\Tables\Actions\ForceDeleteBulkAction;
-use App\Filament\Resources\KepribadianSantriResource\Pages;
+use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class KepribadianSantriResource extends Resource
 {
@@ -32,49 +33,117 @@ class KepribadianSantriResource extends Resource
     protected static ?string $pluralModelLabel = 'Data Kepribadian';
 
     public static function form(Form $form): Form
-    {
-        return $form->schema([
-            Select::make('santri_id')
-                ->label('Santri')
-                ->relationship('santri', 'nama_santri')
-                ->required(),
+{
+    return $form->schema([
 
-            Select::make('semester_id')                       // ⬅️ baru
-                ->label('Semester')
-                ->relationship('semester', 'nama_semester')
-                ->required(),
+        Select::make('kelas_id')
+    ->label('Kelas')
+    ->relationship('kelas', 'nama_kelas')
+    ->reactive()
+    ->required()
+    ->afterStateUpdated(function ($state, callable $get, callable $set) {
 
-            TextInput::make('akhlaq')
-                ->label('Akhlaq')
-                ->numeric()
-                ->required()
-                ->minValue(0)
-                ->maxValue(100),
+    if ($state && $get('semester_id')) {
 
-            TextInput::make('kerajinan')
-                ->label('Kerajinan')
-                ->numeric()
-                ->required()
-                ->minValue(0)
-                ->maxValue(100),
+        $santris = \App\Models\Santri::where('kelas_id', $state)->get();
 
-            TextInput::make('kedisiplinan')
-                ->label('Kedisiplinan')
-                ->numeric()
-                ->required()
-                ->minValue(0)
-                ->maxValue(100),
+        $data = $santris->map(function ($santri) use ($get, $state) {
 
-            TextInput::make('kerapihan')
-                ->label('Kerapihan')
-                ->numeric()
-                ->required()
-                ->minValue(0)
-                ->maxValue(100),
+            $existing = \App\Models\KepribadianSantri::where([
+                'santri_id' => $santri->id,
+                'kelas_id' => $state,
+                'semester_id' => $get('semester_id'),
+            ])->first();
 
-            Hidden::make('user_id')->default(fn () => Auth::id()),
-        ]);
-    }
+            return [
+                'santri_id' => $santri->id,
+                'nama_santri' => $santri->nama_santri,
+                'akhlaq' => $existing?->akhlaq,
+                'kerajinan' => $existing?->kerajinan,
+                'kedisiplinan' => $existing?->kedisiplinan,
+                'kerapihan' => $existing?->kerapihan,
+            ];
+        })->toArray();
+
+        $set('data', $data);
+        }
+    }),
+
+        Select::make('semester_id')
+    ->label('Semester')
+    ->relationship('semester', 'nama_semester')
+    ->reactive()
+    ->required()
+    ->afterStateUpdated(function ($state, callable $get, callable $set) {
+
+    if ($state && $get('kelas_id')) {
+
+        $santris = \App\Models\Santri::where('kelas_id', $get('kelas_id'))->get();
+
+        $data = $santris->map(function ($santri) use ($get, $state) {
+
+            $existing = \App\Models\KepribadianSantri::where([
+                'santri_id' => $santri->id,
+                'kelas_id' => $get('kelas_id'),
+                'semester_id' => $state,
+            ])->first();
+
+            return [
+                'santri_id' => $santri->id,
+                'nama_santri' => $santri->nama_santri,
+                'akhlaq' => $existing?->akhlaq,
+                'kerajinan' => $existing?->kerajinan,
+                'kedisiplinan' => $existing?->kedisiplinan,
+                'kerapihan' => $existing?->kerapihan,
+            ];
+        })->toArray();
+
+        $set('data', $data);
+        }
+    }),
+       Repeater::make('data')
+            ->label('Data Kepribadian')
+    ->schema([
+
+        Hidden::make('santri_id'),
+
+        TextInput::make('nama_santri')
+            ->label('Santri')
+            ->disabled()
+            ->columnSpanFull(), // ✅ full lebar
+
+        TextInput::make('akhlaq')
+            ->numeric()
+            ->required()
+            ->minValue(0)
+            ->maxValue(100),
+
+        TextInput::make('kerajinan')
+            ->numeric()
+            ->required()
+            ->minValue(0)
+            ->maxValue(100),
+
+        TextInput::make('kedisiplinan')
+            ->numeric()
+            ->required()
+            ->minValue(0)
+            ->maxValue(100),
+
+        TextInput::make('kerapihan')
+            ->numeric()
+            ->required()
+            ->minValue(0)
+            ->maxValue(100),
+    ])
+    ->columns(4) // cukup 4 saja
+    ->disableItemCreation()
+    ->disableItemDeletion()
+    ->columnSpanFull(), // ✅ repeater full lebar
+
+        Hidden::make('user_id')->default(fn () => Auth::id()),
+    ]);
+}
 
     public static function table(Table $table): Table
     {

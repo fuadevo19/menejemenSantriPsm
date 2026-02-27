@@ -10,13 +10,26 @@ return new class extends Migration
     {
         Schema::create('kepribadian_santris', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('santri_id')->constrained()->onDelete('cascade');
-            $table->integer('akhlaq');
-            $table->integer('kerajinan');
-            $table->integer('kedisiplinan');
-            $table->integer('kerapihan');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('santri_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('kelas_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('semester_id')->constrained()->cascadeOnDelete();
+
+            $table->integer('akhlaq')->nullable();
+            $table->integer('kerajinan')->nullable();
+            $table->integer('kedisiplinan')->nullable();
+            $table->integer('kerapihan')->nullable();
+
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
+            $table->softDeletes();
+
+            // ✅ anti duplicate (versi baru)
+            $table->unique(
+                ['santri_id', 'semester_id', 'kelas_id'],
+                'unique_kepribadian_santri'
+            );
         });
     }
 

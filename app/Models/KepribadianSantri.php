@@ -12,26 +12,35 @@ class KepribadianSantri extends Model
 
     protected $fillable = [
         'santri_id',
+        'kelas_id',
+        'semester_id',
         'akhlaq',
         'kerajinan',
         'kedisiplinan',
         'kerapihan',
+        'catatan',
         'user_id',
-        'semester_id'
     ];
+
+    /* ================= RELASI ================= */
 
     public function santri()
     {
         return $this->belongsTo(Santri::class);
     }
 
-    public function user()
+    public function kelas()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Kelas::class);
     }
 
     public function semester()
     {
-        return $this->belongsTo(\App\Models\Semester::class);
+        return $this->belongsTo(Semester::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

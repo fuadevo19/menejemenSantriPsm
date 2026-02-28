@@ -1,42 +1,62 @@
 <x-filament::page>
-    <form wire:submit.prevent="submit">
-        {{ $this->form }}
 
-        <div class="mt-6 space-y-3">
-            <x-filament::button
-                wire:click.prevent="cetakCover"
-                color="primary"
-                type="button"
-            >
-                Cetak Cover
-            </x-filament::button>
+    {{ $this->form }}
 
-            <x-filament::button
-                wire:click.prevent="cetakDataDiri"
-                color="primary"
-                type="button"
-            >
-                Cetak Data Diri
-            </x-filament::button>
+    @if($santriList)
+        <div class="mt-6 space-y-4">
 
-            <x-filament::button
-                wire:click.prevent="cetakRaport"
-                color="primary"
-                type="button"
-            >
-                Cetak Raport
-            </x-filament::button>
+            @foreach($santriList as $santri)
+                <div class="p-4 bg-white rounded-xl shadow flex justify-between items-center">
+                    
+                    <div class="font-semibold">
+                        {{ $santri['nama_santri'] }}
+                    </div>
 
-            <x-filament::button
-                wire:click.prevent="cetakPengesahan"
-                color="primary"
-                type="button"
-            >
-                Cetak Pengesahan
-            </x-filament::button>
+                    <div class="flex gap-2">
 
+                        <x-filament::button
+                            wire:click="cetakCover({{ $santri['id'] }})"
+                            size="sm"
+                        >
+                            Cover
+                        </x-filament::button>
+
+                        <x-filament::button
+                            wire:click="cetakDataDiri({{ $santri['id'] }})"
+                            size="sm"
+                        >
+                            Data Diri
+                        </x-filament::button>
+
+                        <x-filament::button
+                            wire:click="cetakRaport({{ $santri['id'] }})"
+                            size="sm"
+                            color="primary"
+                        >
+                            Raport
+                        </x-filament::button>
+
+                        <x-filament::button
+                            wire:click="cetakPengesahan({{ $santri['id'] }})"
+                            size="sm"
+                            color="success"
+                        >
+                            Pengesahan
+                        </x-filament::button>
+
+                    </div>
+                </div>
+            @endforeach
 
         </div>
-        
-    </form>
+    @endif
+
+
+    {{-- SCRIPT BUKA TAB BARU --}}
+    <script>
+        window.addEventListener('open-new-tab', event => {
+            window.open(event.detail.url, '_blank');
+        });
+    </script>
+
 </x-filament::page>

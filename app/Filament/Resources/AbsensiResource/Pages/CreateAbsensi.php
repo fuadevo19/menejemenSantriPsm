@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\AbsensiResource\Pages;
 
+use App\Filament\Resources\AbsensiResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\Resources\AbsensiResource;
+use Illuminate\Support\Facades\Auth;
 
 class CreateAbsensi extends CreateRecord
 {
@@ -26,4 +27,25 @@ class CreateAbsensi extends CreateRecord
                 ->color('gray'),
         ];
     }
+    protected function handleRecordCreation(array $data): \Illuminate\Database\Eloquent\Model
+{
+    foreach ($data['data'] as $item) {
+
+        \App\Models\Absensi::updateOrCreate(
+            [
+                'santri_id' => $item['santri_id'],
+                'kelas_id' => $data['kelas_id'],
+                'semester_id' => $data['semester_id'],
+            ],
+            [
+                'sakit' => $item['sakit'],
+                'izin' => $item['izin'],
+                'alpha' => $item['alpha'],
+                'user_id'  => Auth::id(),
+            ]
+        );
+    }
+
+    return new \App\Models\Absensi();
+}
 }

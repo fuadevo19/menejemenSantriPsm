@@ -4,12 +4,11 @@ namespace App\Filament\Pages;
 
 use App\Models\Santri;
 use App\Models\Semester;
+use App\Models\Kelas;
 use Filament\Forms;
 use Filament\Pages\Page;
 use Filament\Forms\Components\Select;
-use Illuminate\Support\Facades\Redirect;
 use Filament\Notifications\Notification;
-
 
 class CetakRaportSidebar extends Page implements Forms\Contracts\HasForms
 {
@@ -19,102 +18,87 @@ class CetakRaportSidebar extends Page implements Forms\Contracts\HasForms
     protected static string $view = 'filament.pages.cetak-raport-sidebar';
     protected static ?string $title = 'Cetak Raport';
 
-    public ?int $santri_id = null;
+    public ?int $kelas_id = null;
     public ?int $semester_id = null;
+
+    public array $santriList = [];
 
     protected function getFormSchema(): array
     {
         return [
-            Select::make('santri_id')
-        ->label('Nama Santri')
-        ->options(
-            Santri::query()
-                ->whereNotNull('nama_santri')
-                ->pluck('nama_santri', 'id')
-                ->toArray()
-        )
-        ->searchable()
-        ->required()
-        ->default(request()->old('santri_id')),
+            Select::make('kelas_id')
+                ->label('Kelas')
+                ->options(Kelas::pluck('nama_kelas', 'id'))
+                ->searchable()
+                ->reactive()
+                ->afterStateUpdated(fn () => $this->loadSantri()),
 
-    Select::make('semester_id')
-        ->label('Semester')
-        ->options(
-            Semester::query()
-                ->whereNotNull('nama_semester')
-                ->pluck('nama_semester', 'id')
-                ->toArray()
-        )
-        ->searchable()
-        ->required()
-        ->default(request()->old('semester_id')),
+            Select::make('semester_id')
+                ->label('Semester')
+                ->options(Semester::pluck('nama_semester', 'id'))
+                ->searchable()
+                ->reactive()
+                ->afterStateUpdated(fn () => $this->loadSantri()),
         ];
     }
 
-    public function mount(): void
+    public function loadSantri()
     {
-        $this->santri_id = request()->query('santri_id');
-        $this->semester_id = request()->query('semester_id');
-
-        $this->form->fill([
-            'santri_id' => $this->santri_id,
-            'semester_id' => $this->semester_id,
-        ]);
-    }
-
-    public function cetakCover()
-    {
-        if (!$this->santri_id) {
-            Notification::make()
-                ->title('Santri belum dipilih.')
-                ->danger()
-                ->send();
-                
-            return;
+        if ($this->kelas_id && $this->semester_id) {
+            $this->santriList = Santri::where('kelas_id', $this->kelas_id)
+                ->orderBy('nama_santri')
+                ->get()
+                ->toArray();
+        } else {
+            $this->santriList = [];
         }
-
-        return Redirect::to('/cover/' . $this->santri_id);
-        $this->dispatch('open-url', url: $url, newTab: true);
     }
 
-    public function cetakDataDiri()
-    {
-        if (!$this->santri_id) {
-            Notification::make()
-                ->title('Santri belum dipilih.')
-                ->danger()
-                ->send();
-            return;
-        }
+    /* ===========================
+       ACTION CETAK (TAB BARU)
+    ============================ */
 
-        return Redirect::to('/datadiri/' . $this->santri_id);
+    public function cetakCover($santriId)
+    {
+        $this->dispatch('open-new-tab', 
+            url: url('/cover/' . $santriId)
+        );
     }
 
-    public function cetakRaport()
+    public function cetakDataDiri($santriId)
     {
-        if (!$this->santri_id || !$this->semester_id) {
+        $this->dispatch('open-new-tab', 
+            url: url('/datadiri/' . $santriId)
+        );
+    }
+
+    public function cetakRaport($santriId)
+    {
+        if (!$this->semester_id) {
             Notification::make()
-                ->title('Santri dan Semester wajib dipilih.')
+                ->title('Semester belum dipilih.')
                 ->danger()
                 ->send();
             return;
         }
 
-        return Redirect::to('/raport/' . $this->santri_id . '/' . $this->semester_id);
+        $this->dispatch('open-new-tab', 
+            url: url('/raport/' . $santriId . '/' . $this->semester_id)
+        );
     }
 
-    public function cetakPengesahan()
+    public function cetakPengesahan($santriId)
     {
-        if (!$this->santri_id || !$this->semester_id) {
+        if (!$this->semester_id) {
             Notification::make()
-                ->title('Santri dan Semester wajib dipilih.')
+                ->title('Semester belum dipilih.')
                 ->danger()
                 ->send();
             return;
         }
 
-        return Redirect::to('/pengesahan/' . $this->santri_id . '/' . $this->semester_id);
+        $this->dispatch('open-new-tab', 
+            url: url('/pengesahan/' . $santriId . '/' . $this->semester_id)
+        );
     }
-
-
 }
